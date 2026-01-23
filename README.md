@@ -92,12 +92,6 @@ If a token passes the BNC test, you can be confident it's a word that real peopl
 
 For detailed usage, performance benchmarks, and advanced features, see the [API Documentation](docs/API.md).
 
-## How It Works
-
-BNC terms are stored as MD5 hash suffixes in 256 `frozenset` buckets (by first two hex characters of the hash). Lookups hash the input, route to the correct bucket, and perform O(1) set membership. Modules are lazy-loaded on first access per bucket.
-
-For the gory details, see [Implementation Notes](docs/IMPLEMENTATION.md).
-
 ## Development
 
 ```bash
@@ -128,6 +122,10 @@ This package contains data derived from the British National Corpus frequency li
 > The British National Corpus, version 3 (BNC XML Edition). 2007. Distributed by Bodleian Libraries, University of Oxford, on behalf of the BNC Consortium.
 
 **Note:** This is a static snapshot of BNC frequency data. The data is not automatically updated.
+
+## See Also
+
+- **[wordnet-lookup](https://github.com/craigtrim/wordnet-lookup)** - Similar O(1) lookup for WordNet terms with definitions, synonyms, and hypernyms
 
 ## Links
 
