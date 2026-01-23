@@ -125,7 +125,7 @@ This package contains data derived from the British National Corpus frequency li
 
 ## See Also
 
-- **[wordnet-lookup](https://github.com/craigtrim/wordnet-lookup)** - Similar O(1) lookup for WordNet terms with definitions, synonyms, and hypernyms
+- **[wordnet-lookup](https://github.com/craigtrim/wordnet-lookup)** - Similar O(1) lookup using the WordNet lexicon
 
 ## Links
 
