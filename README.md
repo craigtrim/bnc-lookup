@@ -3,7 +3,7 @@
 [![PyPI version](https://img.shields.io/pypi/v/bnc-lookup.svg)](https://pypi.org/project/bnc-lookup/)
 [![PyPI downloads](https://img.shields.io/pypi/dm/bnc-lookup.svg)](https://pypi.org/project/bnc-lookup/)
 [![Python versions](https://img.shields.io/pypi/pyversions/bnc-lookup.svg)](https://pypi.org/project/bnc-lookup/)
-[![License](https://img.shields.io/badge/License-MIT%20%2B%20BNC-yellow.svg)](LICENSE)
+[![License](https://img.shields.io/badge/License-MIT%20%2B%20BNC-yellow.svg)](https://github.com/craigtrim/bnc-lookup/blob/master/LICENSE)
 [![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
 [![Pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
 [![Tests](https://img.shields.io/badge/tests-passing-brightgreen.svg)](https://github.com/craigtrim/bnc-lookup)
@@ -90,7 +90,7 @@ If a token passes the BNC test, you can be confident it's a word that real peopl
 
 ## Documentation
 
-For detailed usage, performance benchmarks, and advanced features, see the [API Documentation](docs/API.md).
+For detailed usage, performance benchmarks, and advanced features, see the [API Documentation](https://github.com/craigtrim/bnc-lookup/blob/master/docs/API.md).
 
 ## Development
 
@@ -102,7 +102,7 @@ make test     # Run tests
 make all      # Full build pipeline
 ```
 
-See [API Documentation](docs/API.md) for detailed development information.
+See [API Documentation](https://github.com/craigtrim/bnc-lookup/blob/master/docs/API.md) for detailed development information.
 
 ## License
 
@@ -110,7 +110,7 @@ This package is dual-licensed:
 - **Software**: MIT License
 - **BNC Data**: BNC User Licence
 
-See [LICENSE](LICENSE) for complete terms.
+See [LICENSE](https://github.com/craigtrim/bnc-lookup/blob/master/LICENSE) for complete terms.
 
 ## Attribution
 
