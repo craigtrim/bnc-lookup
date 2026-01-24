@@ -78,3 +78,57 @@ def test_frequency_ordering():
     python_bucket = bnc.bucket('python')
     # 'the' is more common than 'python'
     assert the_bucket <= python_bucket
+
+
+# Words by bucket tests
+
+def test_words_returns_tuple():
+    """words() should return a tuple."""
+    result = bnc.words(1)
+    assert isinstance(result, tuple)
+    assert len(result) > 0
+
+
+def test_words_bucket_1_contains_common():
+    """Bucket 1 should contain common words."""
+    words = bnc.words(1)
+    # Check some common words are present
+    assert 'the' in words
+    assert 'and' in words
+    assert 'people' in words
+
+
+def test_words_bucket_range():
+    """All buckets 1-100 should have words."""
+    for b in [1, 25, 50, 75, 100]:
+        words = bnc.words(b)
+        assert len(words) > 0
+
+
+def test_words_invalid_bucket():
+    """Invalid bucket should raise ValueError."""
+    import pytest
+    with pytest.raises(ValueError):
+        bnc.words(0)
+    with pytest.raises(ValueError):
+        bnc.words(101)
+
+
+def test_sample_returns_list():
+    """sample() should return a list."""
+    result = bnc.sample(1, 5)
+    assert isinstance(result, list)
+    assert len(result) == 5
+
+
+def test_sample_respects_n():
+    """sample() should return n items."""
+    assert len(bnc.sample(1, 3)) == 3
+    assert len(bnc.sample(1, 10)) == 10
+
+
+def test_sample_words_exist():
+    """Sampled words should exist in BNC."""
+    words = bnc.sample(1, 10)
+    for word in words:
+        assert bnc.exists(word)
