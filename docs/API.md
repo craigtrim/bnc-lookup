@@ -4,8 +4,8 @@
 
 - [Installation](#installation)
 - [Basic Usage](#basic-usage)
+- [Frequency Buckets](#frequency-buckets)
 - [Advanced Usage](#advanced-usage)
-- [Direct Dictionary Access](#direct-dictionary-access)
 - [Performance](#performance)
 - [How It Works](#how-it-works)
 - [Project Structure](#project-structure)
@@ -19,44 +19,24 @@ pip install bnc-lookup
 
 ## Basic Usage
 
-The main interface is the `is_bnc_term()` function:
+Import the module and use the two main functions:
 
 ```python
-from bnc_lookup import is_bnc_term
+import bnc_lookup as bnc
 
 # Check if a word exists in BNC
-is_bnc_term('the')          # True
-is_bnc_term('however')      # True
-is_bnc_term('nonetheless')  # True
-is_bnc_term('xyzabc123')    # False
+bnc.exists('the')          # True
+bnc.exists('however')      # True
+bnc.exists('xyzabc123')    # False
 
-# Validate words
-if is_bnc_term('according'):
-    print("Valid BNC term")
+# Get frequency bucket (1=most common, 100=least common)
+bnc.bucket('the')          # 1
+bnc.bucket('python')       # 4
+bnc.bucket('xyzabc123')    # None
 
 # Works with various forms
-is_bnc_term('computers')    # Handles plurals automatically
-```
-
-## Advanced Usage
-
-For more control, you can use the `FindBnc` class directly:
-
-```python
-from bnc_lookup import FindBnc
-
-finder = FindBnc()
-exists = finder.exists('however')
-```
-
-### Batch Validation
-
-```python
-from bnc_lookup import is_bnc_term
-
-words = ['alpha', 'beta', 'gamma', 'notaword']
-valid_words = [word for word in words if is_bnc_term(word)]
-print(valid_words)  # ['alpha', 'beta', 'gamma']
+bnc.exists('computers')    # Handles plurals automatically
+bnc.bucket('computers')    # Returns bucket for singular form
 ```
 
 ### Case Handling
@@ -64,9 +44,12 @@ print(valid_words)  # ['alpha', 'beta', 'gamma']
 All lookups are case-insensitive:
 
 ```python
-is_bnc_term('THE')     # True
-is_bnc_term('The')     # True
-is_bnc_term('the')     # True
+bnc.exists('THE')     # True
+bnc.exists('The')     # True
+bnc.exists('the')     # True
+
+bnc.bucket('THE')     # 1
+bnc.bucket('The')     # 1
 ```
 
 ### Plural Detection
@@ -75,32 +58,101 @@ The library automatically handles common plural forms:
 
 ```python
 # If 'computers' isn't found directly, checks 'computer'
-is_bnc_term('computers')    # True
+bnc.exists('computers')    # True
+bnc.bucket('computers')    # 1
 
 # Works for most regular plurals
-is_bnc_term('databases')    # True
+bnc.exists('databases')    # True
+```
+
+## Frequency Buckets
+
+Words are ranked into 100 buckets based on corpus frequency:
+
+| Bucket | Description | Word Count |
+|--------|-------------|------------|
+| 1 | Most frequent | ~6,700 |
+| 2-10 | Very common | ~6,700 each |
+| 11-50 | Common | ~6,700 each |
+| 51-99 | Less common | ~6,700 each |
+| 100 | Least frequent | ~6,700 |
+
+### Usage Examples
+
+```python
+import bnc_lookup as bnc
+
+# Filter by frequency
+def is_common_word(word):
+    bucket = bnc.bucket(word)
+    return bucket is not None and bucket <= 10
+
+# Prefer common words
+def rank_words(words):
+    return sorted(words, key=lambda w: bnc.bucket(w) or 101)
+
+# Exclude rare words
+tokens = ['the', 'computer', 'qwerty', 'xyzabc']
+common = [t for t in tokens if (b := bnc.bucket(t)) and b <= 50]
+```
+
+### How Buckets Are Calculated
+
+1. All 669,417 unique words are sorted by corpus frequency
+2. Words are divided into 100 equal groups (~6,694 per bucket)
+3. Bucket 1 contains the top 1% most frequent words
+4. Bucket 100 contains the bottom 1% least frequent words
+
+## Advanced Usage
+
+For more control, you can use the classes directly:
+
+```python
+from bnc_lookup import FindBnc, FindFreq
+
+# Existence checking
+finder = FindBnc()
+exists = finder.exists('however')
+
+# Frequency lookup
+freq = FindFreq()
+bucket = freq.bucket('however')
+```
+
+### Batch Validation
+
+```python
+import bnc_lookup as bnc
+
+words = ['alpha', 'beta', 'gamma', 'notaword']
+valid_words = [word for word in words if bnc.exists(word)]
+print(valid_words)  # ['alpha', 'beta', 'gamma']
+
+# With frequency info
+word_buckets = [(w, bnc.bucket(w)) for w in words]
+# [('alpha', 1), ('beta', 1), ('gamma', 1), ('notaword', None)]
 ```
 
 ## Performance
 
-The library is optimized for speed with zero I/O overhead. All lookups are performed against pre-compiled dictionaries:
+The library is optimized for speed with zero I/O overhead:
 
 ### Benchmark Example
 
 ```python
 import time
-from bnc_lookup import is_bnc_term
+import bnc_lookup as bnc
 
 # Single lookup benchmark
 start = time.perf_counter()
-result = is_bnc_term('nonetheless')
+result = bnc.exists('nonetheless')
 elapsed = time.perf_counter() - start
 print(f"Lookup time: {elapsed*1000:.6f}ms")  # Typically microseconds
 
 # Batch lookup benchmark
 words = ['alpha', 'beta', 'gamma', 'delta', 'epsilon']
 start = time.perf_counter()
-results = [is_bnc_term(word) for word in words]
+results = [bnc.exists(word) for word in words]
 elapsed = time.perf_counter() - start
 print(f"Batch lookup time: {elapsed*1000:.6f}ms for {len(words)} words")
 ```
@@ -108,7 +160,7 @@ print(f"Batch lookup time: {elapsed*1000:.6f}ms for {len(words)} words")
 ### Performance Characteristics
 
 - **Lookup Complexity**: O(1) - Direct dictionary access
-- **Memory**: All dictionaries loaded at import (one-time cost)
+- **Memory**: Lazy loading - only imports buckets when accessed
 - **I/O Operations**: Zero - No file system or database access
 - **Typical Latency**: Microseconds per lookup
 
@@ -126,16 +178,28 @@ Traditional corpus interfaces require:
 
 ### Architecture
 
-1. **Hash-Based Storage**: BNC terms are stored as MD5 hash suffixes in 256 `frozenset` buckets
+1. **Hash-Based Storage**: BNC terms are stored as MD5 hash suffixes in 256 buckets
 2. **Bucket Routing**: The first 2 hex characters of the hash determine the bucket (00-ff)
 3. **Lazy Loading**: Hash modules are imported on-demand and cached
 4. **Plural Handling**: If a word isn't found and ends with 's', the singular form is checked
 5. **Case Insensitive**: All inputs are normalized to lowercase
 
+### Storage Structure
+
+**Existence checking** (`bnc_lookup/hs/`):
+- 256 files (h_00.py through h_ff.py)
+- Each contains a `frozenset` of hash suffixes
+- O(1) membership testing
+
+**Frequency buckets** (`bnc_lookup/freq/`):
+- 256 files (f_00.py through f_ff.py)
+- Each contains a `dict` mapping hash suffix → bucket number
+- O(1) lookup
+
 ### Lookup Flow
 
 ```python
-# When you call: is_bnc_term('Hello')
+# When you call: bnc.exists('Hello')
 
 1. Normalize: 'Hello' -> 'hello'
 2. Hash: MD5('hello') -> '5d4...592'
@@ -149,7 +213,7 @@ Traditional corpus interfaces require:
 
 ### Data Source
 
-The hash files are pre-compiled from the BNC frequency list (669,418 unique word forms).
+The hash files are pre-compiled from the BNC frequency list (669,417 unique word forms).
 
 For detailed implementation notes, see [IMPLEMENTATION.md](IMPLEMENTATION.md).
 
@@ -158,15 +222,20 @@ For detailed implementation notes, see [IMPLEMENTATION.md](IMPLEMENTATION.md).
 ```
 bnc-lookup/
 ├── bnc_lookup/
-│   ├── __init__.py           # Main API exports
-│   ├── find_bnc.py           # Core lookup logic
-│   └── hs/
-│       ├── __init__.py       # Hash module exports
-│       ├── h_00.py           # Hashes with prefix '00'
-│       ├── h_01.py           # Hashes with prefix '01'
-│       └── ...               # Through 'ff' (256 files)
+│   ├── __init__.py           # Main API: exists(), bucket()
+│   ├── find_bnc.py           # Existence lookup logic
+│   ├── find_freq.py          # Frequency bucket lookup logic
+│   ├── hs/                   # Hash storage (256 files)
+│   │   ├── __init__.py
+│   │   ├── h_00.py           # Hashes with prefix '00'
+│   │   └── ...               # Through 'ff'
+│   └── freq/                 # Frequency buckets (256 files)
+│       ├── __init__.py
+│       ├── f_00.py           # Buckets with prefix '00'
+│       └── ...               # Through 'ff'
 ├── builder/
 │   ├── build_hash_files.py   # Generates hash files
+│   ├── build_frequency_buckets.py  # Generates frequency files
 │   └── all.num               # Source frequency list
 ├── tests/
 │   └── bnc_lookup_test.py
@@ -199,6 +268,16 @@ make test
 
 # Run full build (install, test, lint, build)
 make all
+```
+
+### Regenerating Data Files
+
+```bash
+# Regenerate hash files from BNC data
+python builder/build_hash_files.py
+
+# Regenerate frequency bucket files
+python builder/build_frequency_buckets.py
 ```
 
 ### Code Quality

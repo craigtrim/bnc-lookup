@@ -1,7 +1,7 @@
 # BNC Lookup
 
 [![PyPI version](https://img.shields.io/pypi/v/bnc-lookup.svg)](https://pypi.org/project/bnc-lookup/)
-[![PyPI downloads](https://img.shields.io/pypi/dm/bnc-lookup.svg)](https://pypi.org/project/bnc-lookup/)
+[![PyPI downloads](https://static.pepy.tech/badge/bnc-lookup/month)](https://pepy.tech/project/bnc-lookup)
 [![Python versions](https://img.shields.io/pypi/pyversions/bnc-lookup.svg)](https://pypi.org/project/bnc-lookup/)
 [![License](https://img.shields.io/badge/License-MIT%20%2B%20BNC-yellow.svg)](https://github.com/craigtrim/bnc-lookup/blob/master/LICENSE)
 [![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
@@ -10,7 +10,7 @@
 
 **Is this token a word? O(1) answer. No setup. No dependencies.**
 
-A simple question deserves a simple answer. This library gives you instant yes/no validation against 669,000 word forms from the British National Corpus.
+A simple question deserves a simple answer. This library gives you instant yes/no validation against 669,000 word forms from the British National Corpus, plus frequency ranking.
 
 ## Quick Start
 
@@ -19,19 +19,25 @@ pip install bnc-lookup
 ```
 
 ```python
-from bnc_lookup import is_bnc_term
+import bnc_lookup as bnc
 
-# That's it. Start validating.
-is_bnc_term('the')          # True
-is_bnc_term('however')      # True
-is_bnc_term('nonetheless')  # True
-is_bnc_term('xyzabc123')    # False
+# Check if a word exists
+bnc.exists('the')          # True
+bnc.exists('however')      # True
+bnc.exists('xyzabc123')    # False
+
+# Get frequency bucket (1=most common, 100=least common)
+bnc.bucket('the')          # 1
+bnc.bucket('python')       # 4
+bnc.bucket('qwerty')       # 12
+bnc.bucket('xyzabc123')    # None (not found)
 
 # Handles plurals automatically
-is_bnc_term('computers')    # True
+bnc.exists('computers')    # True
+bnc.bucket('computers')    # 1
 
 # Case insensitive
-is_bnc_term('THE')          # True
+bnc.exists('THE')          # True
 ```
 
 ## Features
@@ -41,7 +47,8 @@ is_bnc_term('THE')          # True
 - **Zero Setup** - No corpus downloads or configuration
 - **Microsecond Lookups** - O(1) dictionary access
 - **Smart Plurals** - Automatically checks singular forms
-- **Simple API** - One function does it all
+- **Frequency Ranking** - 100 buckets from most to least common
+- **Simple API** - Two functions: `exists()` and `bucket()`
 
 ## The Problem This Solves
 
@@ -51,8 +58,8 @@ Not "what does it mean?" Not "give me synonyms." Just: is this a word?
 
 <table>
 <tr>
-<td align="center"><code>is_bnc_term('computer')</code></td>
-<td align="center"><code>is_bnc_term('asdfgh')</code></td>
+<td align="center"><code>bnc.exists('computer')</code></td>
+<td align="center"><code>bnc.exists('asdfgh')</code></td>
 </tr>
 <tr>
 <td align="center"><img src="https://raw.githubusercontent.com/craigtrim/bnc-lookup/master/docs/images/yes-hot-dog.png" width="180"></td>
@@ -65,6 +72,27 @@ Not "what does it mean?" Not "give me synonyms." Just: is this a word?
 </table>
 
 That's it. O(1) response. No ambiguity.
+
+## Frequency Buckets
+
+Words are ranked into 100 buckets based on their frequency in the BNC corpus:
+
+| Bucket | Description | Examples |
+|--------|-------------|----------|
+| 1 | Most frequent (~6,700 words) | the, of, and, is, computer |
+| 2-10 | Very common | algorithm, python, beautiful |
+| 11-50 | Common | qwerty, specialized terms |
+| 51-99 | Less common | Rare but valid words |
+| 100 | Least frequent | Obscure terms |
+
+```python
+import bnc_lookup as bnc
+
+# Filter by frequency
+def is_common_word(word):
+    bucket = bnc.bucket(word)
+    return bucket is not None and bucket <= 10
+```
 
 ## Why BNC?
 
@@ -81,12 +109,13 @@ If a token passes the BNC test, you can be confident it's a word that real peopl
 - **NLP preprocessing**: Filter candidates before expensive operations
 - **Spell-check pre-filtering**: Quick reject obvious non-words before fuzzy matching
 - **Data cleaning**: Identify malformed or corrupted text
+- **Frequency-based filtering**: Prefer common words over obscure ones
 
 ## What This Doesn't Do
 
 - No definitions, synonyms, or semantic relationships (use spaCy for that)
-- No frequency counts or rankings (just yes/no)
 - No spell-checking or suggestions (just existence check)
+- No irregular plural handling ("mice" → "mouse")
 
 ## Documentation
 

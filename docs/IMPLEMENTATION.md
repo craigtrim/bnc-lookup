@@ -36,7 +36,7 @@ We only store the suffix (30 chars) after splitting on the 2-char prefix, saving
 ## Why 256 Buckets?
 
 Two hex characters = 16 × 16 = 256 possible prefixes. This gives:
-- ~2,615 entries per bucket on average (669,418 ÷ 256)
+- ~2,615 entries per bucket on average (669,417 ÷ 256)
 - Small enough files for fast imports
 - Uniform distribution (MD5 property)
 
@@ -82,7 +82,7 @@ Input normalization:
 
 The same normalization is applied at build time and lookup time.
 
-## Lookup Flow
+## Existence Lookup Flow
 
 ```
 Input: "Hello"
@@ -106,6 +106,68 @@ Check: "41402abc4b2a76b9719d911017c592" in hashes_5d
 Return: True/False
 ```
 
+## Frequency Bucket System
+
+### Architecture
+
+The frequency system uses the same 256-bucket pattern but stores bucket numbers (1-100) instead of just membership:
+
+**Storage** (`bnc_lookup/freq/`):
+- 256 files (f_00.py through f_ff.py)
+- Each contains a `dict` mapping hash suffix → bucket number
+- Same lazy loading pattern as existence checking
+
+### Bucket Calculation
+
+```python
+# During build:
+word_freqs.sort(key=lambda x: x[1], reverse=True)  # Sort by frequency
+bucket_size = total_words / 100  # ~6,694 words per bucket
+
+for idx, (word, freq) in enumerate(word_freqs):
+    bucket = min(int(idx / bucket_size) + 1, 100)
+    # Store: hash(word) -> bucket
+```
+
+This creates a percentile-based ranking:
+- Bucket 1: Top 1% most frequent words
+- Bucket 100: Bottom 1% least frequent words
+
+### Why Percentile Buckets?
+
+Word frequencies follow a Zipfian distribution (extremely skewed):
+- "the": 6,187,927 occurrences
+- Median word: ~100 occurrences
+- Many words: 1 occurrence
+
+Linear bucketing would put 99% of words in bucket 100. Percentile bucketing ensures:
+- Equal word count per bucket (~6,694)
+- Meaningful differentiation across the frequency spectrum
+
+### Frequency Lookup Flow
+
+```
+Input: "python"
+    │
+    ▼
+Normalize: "python"
+    │
+    ▼
+MD5: "23eeeb4347bdd26bfc6b7ee9a3b755dd"
+    │
+    ▼
+Split: prefix="23", suffix="eeeb4347bdd26bfc6b7ee9a3b755dd"
+    │
+    ▼
+Load: importlib.import_module('bnc_lookup.freq.f_23')
+    │
+    ▼
+Lookup: buckets_23.get(suffix)  # Returns 4
+    │
+    ▼
+Return: 4
+```
+
 ## Plural Handling
 
 If the word ends with 's' and isn't found, try the singular:
@@ -121,6 +183,8 @@ This catches regular plurals like "computers" → "computer".
 Limitation: Doesn't handle irregular plurals ("mice" → "mouse").
 
 ## Build Process
+
+### Existence Hash Files
 
 The `builder/build_hash_files.py` script:
 
@@ -140,6 +204,25 @@ hashes_5d = frozenset({
 })
 ```
 
+### Frequency Bucket Files
+
+The `builder/build_frequency_buckets.py` script:
+
+1. Reads `all.num` and aggregates frequencies per word
+2. Sorts by frequency (descending)
+3. Assigns buckets 1-100 based on percentile
+4. Hashes each word and groups by prefix
+5. Writes 256 Python files with `dict` literals
+
+```python
+# Example generated file: f_5d.py
+buckets_5d = {
+    '41402abc4b2a76b9719d911017c592': 1,
+    '8f14e45fceea167a5a36dedd4bea254': 23,
+    ...
+}
+```
+
 ## Performance Characteristics
 
 | Operation | Complexity | Typical Time |
@@ -155,9 +238,17 @@ Total lookup time: ~400ns warm, ~5ms cold (first access to a bucket).
 ## Memory Usage
 
 - Each hash suffix: 30 chars = ~80 bytes (Python string overhead)
-- 669,418 entries × 80 bytes ≈ 53 MB if all loaded
+- 669,417 entries × 80 bytes ≈ 53 MB if all loaded
 - Lazy loading: Only used buckets in memory
 - Typical usage: 10-50 buckets = 2-13 MB
+
+### Frequency Storage Overhead
+
+Each frequency bucket file stores suffix → int mappings:
+- Same 30-char suffix keys
+- Integer values (1-100): 28 bytes each in Python
+- Total additional: ~19 MB if all loaded
+- Same lazy loading benefits apply
 
 ## Collision Resistance
 
@@ -189,7 +280,7 @@ The BNC frequency list (`all.num`) is derived from:
 - **Source**: Adam Kilgarriff's BNC frequency lists
 - **URL**: https://www.kilgarriff.co.uk/BNClists/all.num.gz
 - **Format**: Space-delimited (frequency, word, POS tag, document count)
-- **Entries**: 938,972 lines, 669,418 unique word forms
+- **Entries**: 938,971 lines, 669,417 unique word forms (after aggregation)
 
 ## Future Optimizations
 
