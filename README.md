@@ -102,6 +102,16 @@ It's a **100-million-word corpus of real British English** collected from writte
 
 If a token passes the BNC test, you can be confident it's a word that real people actually use.
 
+## Real Words vs Dictionary Words
+
+How much of real-world English is in the dictionary? We compared BNC against WordNet:
+
+![BNC Vocabulary Zones by WordNet Coverage](https://raw.githubusercontent.com/craigtrim/bnc-lookup/master/docs/images/vocabulary_zones.png)
+
+**93%** of common words (bucket 1-10) are in WordNet. But dictionaries miss proper nouns, technical terms, compounds, and domain jargon that appear constantly in real text.
+
+That's the gap BNC fills. [Full analysis](https://github.com/craigtrim/bnc-lookup/issues/1)
+
 ## When to Use This
 
 - **Tokenization filtering**: Keep real words, discard garbage
@@ -155,6 +165,7 @@ This package contains data derived from the British National Corpus frequency li
 ## See Also
 
 - **[wordnet-lookup](https://github.com/craigtrim/wordnet-lookup)** - Similar O(1) lookup using the WordNet lexicon
+- **[BNC vs WordNet Analysis](https://github.com/craigtrim/bnc-lookup/issues/1)** - Deep dive on what each captures
 
 ## Links
 
