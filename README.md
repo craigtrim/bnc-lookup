@@ -4,7 +4,7 @@
 [![Downloads](https://pepy.tech/badge/bnc-lookup)](https://pepy.tech/project/bnc-lookup)
 [![Python 3.7+](https://img.shields.io/badge/python-3.7%2B-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-[![Tests](https://img.shields.io/badge/tests-19%20passed-brightgreen)]()
+[![Tests](https://img.shields.io/badge/tests-32%20passed-brightgreen)]()
 
 **Is this token a word? O(1) answer. No setup. No dependencies.**
 
@@ -30,11 +30,16 @@ bnc.bucket('python')       # 4
 bnc.bucket('qwerty')       # 12
 bnc.bucket('xyzabc123')    # None (not found)
 
-# Handles plurals automatically
-bnc.exists('computers')    # True
-bnc.bucket('computers')    # 1
+# Relative frequency (per-word precision)
+bnc.relative_frequency('the')              # 0.0618
+bnc.relative_frequency('shimmered')        # 9.79e-07
 
-# Case insensitive
+# Expected occurrences in a text of given length
+bnc.expected_count('the', 50000)           # 3090.7
+bnc.expected_count('the', 50000, rounded=True)  # 3091
+
+# Handles plurals and case automatically
+bnc.exists('computers')    # True
 bnc.exists('THE')          # True
 ```
 
@@ -46,7 +51,9 @@ bnc.exists('THE')          # True
 - **Microsecond Lookups** - O(1) dictionary access
 - **Smart Plurals** - Automatically checks singular forms
 - **Frequency Ranking** - 100 buckets from most to least common
-- **Simple API** - Two functions: `exists()` and `bucket()`
+- **Relative Frequency** - Per-word precision for quantitative analysis
+- **Expected Counts** - Predict word occurrences in any text length
+- **CLI Tools** - `bnc-exists`, `bnc-bucket`, `bnc-freq`, `bnc-expected`
 
 ## The Problem This Solves
 
@@ -124,6 +131,16 @@ That's the gap BNC fills. [Full analysis](https://github.com/craigtrim/bnc-looku
 - No definitions, synonyms, or semantic relationships (use spaCy for that)
 - No spell-checking or suggestions (just existence check)
 - No irregular plural handling ("mice" → "mouse")
+
+## CLI
+
+```bash
+bnc-exists the            # True (exit code 0)
+bnc-bucket python         # 4
+bnc-freq the              # 6.181373e-02
+bnc-expected the 50000    # 3090.6865
+bnc-expected the 50000 --rounded  # 3091
+```
 
 ## Documentation
 
