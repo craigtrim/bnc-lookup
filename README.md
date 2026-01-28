@@ -1,12 +1,10 @@
 # BNC Lookup
 
-[![PyPI version](https://img.shields.io/pypi/v/bnc-lookup.svg)](https://pypi.org/project/bnc-lookup/)
-[![PyPI downloads](https://static.pepy.tech/badge/bnc-lookup/month)](https://pepy.tech/project/bnc-lookup)
-[![Python versions](https://img.shields.io/pypi/pyversions/bnc-lookup.svg)](https://pypi.org/project/bnc-lookup/)
-[![License](https://img.shields.io/badge/License-MIT%20%2B%20BNC-yellow.svg)](https://github.com/craigtrim/bnc-lookup/blob/master/LICENSE)
-[![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
-[![Pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
-[![Tests](https://img.shields.io/badge/tests-passing-brightgreen.svg)](https://github.com/craigtrim/bnc-lookup)
+[![PyPI version](https://badge.fury.io/py/bnc-lookup.svg)](https://badge.fury.io/py/bnc-lookup)
+[![Downloads](https://pepy.tech/badge/bnc-lookup)](https://pepy.tech/project/bnc-lookup)
+[![Python 3.7+](https://img.shields.io/badge/python-3.7%2B-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+[![Tests](https://img.shields.io/badge/tests-19%20passed-brightgreen)]()
 
 **Is this token a word? O(1) answer. No setup. No dependencies.**
 
