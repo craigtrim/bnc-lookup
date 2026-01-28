@@ -132,3 +132,86 @@ def test_sample_words_exist():
     words = bnc.sample(1, 10)
     for word in words:
         assert bnc.exists(word)
+
+
+# Relative frequency tests
+
+def test_relative_frequency_common_words():
+    """Common words should have higher relative frequencies."""
+    rf_the = bnc.relative_frequency('the')
+    rf_python = bnc.relative_frequency('python')
+    assert rf_the is not None
+    assert rf_python is not None
+    assert rf_the > rf_python
+
+
+def test_relative_frequency_range():
+    """Relative frequency should be between 0 and 1."""
+    rf = bnc.relative_frequency('the')
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_relative_frequency_nonexistent():
+    """Non-existent words should return None."""
+    assert bnc.relative_frequency('xyzabc123') is None
+
+
+def test_relative_frequency_empty():
+    assert bnc.relative_frequency('') is None
+
+
+def test_relative_frequency_case_insensitive():
+    assert bnc.relative_frequency('THE') == bnc.relative_frequency('the')
+
+
+def test_relative_frequency_plurals():
+    """Plural fallback should work."""
+    assert bnc.relative_frequency('computers') is not None
+
+
+# Expected count tests
+
+def test_expected_count_the():
+    """'the' in 50k tokens should be ~3000+."""
+    ec = bnc.expected_count('the', 50000)
+    assert ec is not None
+    assert ec > 2000
+
+
+def test_expected_count_rare_word():
+    """Rare words should have low expected counts."""
+    ec = bnc.expected_count('shimmered', 50000)
+    assert ec is not None
+    assert ec < 1.0
+
+
+def test_expected_count_nonexistent():
+    assert bnc.expected_count('xyzabc123', 50000) is None
+
+
+def test_expected_count_scales_with_length():
+    """Expected count should scale linearly with text length."""
+    ec1 = bnc.expected_count('the', 10000)
+    ec2 = bnc.expected_count('the', 20000)
+    assert ec1 is not None
+    assert ec2 is not None
+    assert abs(ec2 - 2 * ec1) < 0.001
+
+
+def test_expected_count_rounded():
+    """rounded=True should return an int."""
+    ec = bnc.expected_count('the', 50000, rounded=True)
+    assert ec is not None
+    assert isinstance(ec, int)
+    assert ec > 2000
+
+
+def test_expected_count_rounded_rare_word():
+    """Rare words should round to 0."""
+    ec = bnc.expected_count('shimmered', 50000, rounded=True)
+    assert ec == 0
+
+
+def test_expected_count_rounded_nonexistent():
+    assert bnc.expected_count('xyzabc123', 50000, rounded=True) is None
