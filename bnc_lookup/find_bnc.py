@@ -9,6 +9,10 @@ Bucket files are lazy-loaded on first access and cached in memory.
 
 Includes automatic plural fallback: if a word ending in 's' is not found,
 the singular form (with trailing 's' removed) is also checked.
+
+Includes contraction fallback: if a contraction like "we'll" is not found,
+the components ("we" and "'ll") are checked separately. This accounts for
+the BNC's tokenization of contractions into separate parts.
 """
 
 import hashlib
@@ -17,6 +21,10 @@ import importlib
 from bnc_lookup.normalize import normalize
 
 _cache = {}
+
+# Contraction suffixes stored as separate tokens in the BNC corpus
+# Order matters: longer suffixes must be checked before shorter ones
+CONTRACTION_SUFFIXES = ("n't", "'ll", "'re", "'ve", "'m", "'d")
 
 
 def _get_hash_set(prefix: str) -> frozenset:
@@ -68,6 +76,35 @@ def _hash_exists(input_text: str) -> bool:
         return False
 
 
+def _split_contraction(word: str) -> tuple[str, str] | None:
+    """Split a contraction into its component parts if possible.
+
+    The BNC tokenizes contractions separately (e.g., "we'll" → "we" + "'ll").
+    This function reverses that split for fallback lookup.
+
+    Args:
+        word: A normalized word that may be a contraction.
+
+    Returns:
+        Tuple of (stem, suffix) if the word matches a contraction pattern,
+        or None if no contraction pattern matches.
+
+    Examples:
+        >>> _split_contraction("we'll")
+        ("we", "'ll")
+        >>> _split_contraction("don't")
+        ("do", "n't")
+        >>> _split_contraction("hello")
+        None
+    """
+    for suffix in CONTRACTION_SUFFIXES:
+        if word.endswith(suffix):
+            stem = word[:-len(suffix)]
+            if stem:  # Ensure we have a non-empty stem
+                return (stem, suffix)
+    return None
+
+
 class FindBnc:
     """O(1) word existence checker against 669,417 BNC word forms.
 
@@ -85,15 +122,17 @@ class FindBnc:
     def exists(self, input_text: str) -> bool:
         """Check if a word exists in the BNC corpus.
 
-        Performs case-insensitive lookup with automatic plural fallback.
-        If the word is not found and ends with 's' (length > 3), the
-        singular form is also checked.
+        Performs case-insensitive lookup with automatic fallbacks:
+        1. Direct lookup of the normalized word
+        2. Plural fallback: if word ends with 's' (length > 3), try singular
+        3. Contraction fallback: if word is a contraction, check if both
+           components exist (e.g., "we'll" → "we" + "'ll")
 
         Args:
             input_text: The word to check.
 
         Returns:
-            True if the word (or its singular form) exists in the BNC.
+            True if the word exists in the BNC (directly or via fallback).
         """
         input_text = normalize(input_text)
 
@@ -102,6 +141,13 @@ class FindBnc:
 
         if input_text.endswith('s') and len(input_text) > 3:
             if _hash_exists(input_text[:-1]):
+                return True
+
+        # Contraction fallback: check if both parts exist separately
+        parts = _split_contraction(input_text)
+        if parts:
+            stem, suffix = parts
+            if _hash_exists(stem) and _hash_exists(suffix):
                 return True
 
         return False

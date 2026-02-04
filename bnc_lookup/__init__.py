@@ -24,11 +24,15 @@ from bnc_lookup.find_words import FindWords
 def exists(input_text: str) -> bool:
     """Check if a word exists in the BNC corpus.
 
+    Includes automatic fallbacks:
+    - Plural fallback: "computers" → tries "computer"
+    - Contraction fallback: "we'll" → checks "we" + "'ll" exist
+
     Args:
         input_text: The word to check.
 
     Returns:
-        True if the word (or its singular form) exists in the BNC.
+        True if the word exists in the BNC (directly or via fallback).
     """
     return FindBnc().exists(input_text)
 

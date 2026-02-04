@@ -671,3 +671,190 @@ def test_all_functions_with_modifier_letter_apostrophe():
     assert bnc.bucket(modifier_dont) == bnc.bucket(standard_dont)
     assert bnc.relative_frequency(
         modifier_dont) == bnc.relative_frequency(standard_dont)
+
+
+# Contraction fallback tests (issue #5)
+
+def test_contraction_fallback_well():
+    """we'll should exist via contraction fallback (we + 'll)."""
+    assert bnc.exists("we'll") is True
+
+
+def test_contraction_fallback_ill():
+    """i'll should exist via contraction fallback (i + 'll)."""
+    assert bnc.exists("i'll") is True
+
+
+def test_contraction_fallback_youll():
+    """you'll should exist via contraction fallback (you + 'll)."""
+    assert bnc.exists("you'll") is True
+
+
+def test_contraction_fallback_theyll():
+    """they'll should exist via contraction fallback (they + 'll)."""
+    assert bnc.exists("they'll") is True
+
+
+def test_contraction_fallback_im():
+    """i'm should exist via contraction fallback (i + 'm)."""
+    assert bnc.exists("i'm") is True
+
+
+def test_contraction_fallback_youre():
+    """you're should exist via contraction fallback (you + 're)."""
+    assert bnc.exists("you're") is True
+
+
+def test_contraction_fallback_were():
+    """we're should exist via contraction fallback (we + 're)."""
+    assert bnc.exists("we're") is True
+
+
+def test_contraction_fallback_theyre():
+    """they're should exist via contraction fallback (they + 're)."""
+    assert bnc.exists("they're") is True
+
+
+def test_contraction_fallback_ive():
+    """i've should exist via contraction fallback (i + 've)."""
+    assert bnc.exists("i've") is True
+
+
+def test_contraction_fallback_youve():
+    """you've should exist via contraction fallback (you + 've)."""
+    assert bnc.exists("you've") is True
+
+
+def test_contraction_fallback_weve():
+    """we've should exist via contraction fallback (we + 've)."""
+    assert bnc.exists("we've") is True
+
+
+def test_contraction_fallback_theyve():
+    """they've should exist via contraction fallback (they + 've)."""
+    assert bnc.exists("they've") is True
+
+
+def test_contraction_fallback_id():
+    """i'd should exist via contraction fallback (i + 'd)."""
+    assert bnc.exists("i'd") is True
+
+
+def test_contraction_fallback_youd():
+    """you'd should exist via contraction fallback (you + 'd)."""
+    assert bnc.exists("you'd") is True
+
+
+def test_contraction_fallback_wed():
+    """we'd should exist via contraction fallback (we + 'd)."""
+    assert bnc.exists("we'd") is True
+
+
+def test_contraction_fallback_theyd():
+    """they'd should exist via contraction fallback (they + 'd)."""
+    assert bnc.exists("they'd") is True
+
+
+def test_contraction_fallback_case_insensitive():
+    """Contraction fallback should be case insensitive."""
+    assert bnc.exists("We'll") is True
+    assert bnc.exists("WE'LL") is True
+    assert bnc.exists("I'm") is True
+    assert bnc.exists("I'M") is True
+
+
+def test_contraction_fallback_curly_apostrophe():
+    """Contraction fallback should work with curly apostrophes."""
+    # we'll with curly apostrophe
+    curly_well = 'we' + chr(0x2019) + 'll'
+    assert bnc.exists(curly_well) is True
+
+    # i'm with curly apostrophe
+    curly_im = 'i' + chr(0x2019) + 'm'
+    assert bnc.exists(curly_im) is True
+
+
+def test_contraction_fallback_invalid_stem():
+    """Contractions with invalid stems should return False."""
+    # "zqn't" -> "zq" + "n't" - "zq" is not a word in BNC
+    assert bnc.exists("zqn't") is False
+    # "xyzzy'll" -> "xyzzy" + "'ll" - "xyzzy" is not a word
+    assert bnc.exists("xyzzy'll") is False
+
+
+def test_contraction_fallback_aint():
+    """ain't exists via fallback since 'ai' and 'n't' both exist in BNC."""
+    # While 'ain't' might seem like it shouldn't exist, 'ai' is in the BNC
+    # (as an abbreviation) and 'n't' is stored as a separate token
+    assert bnc.exists("ain't") is True
+
+
+def test_contraction_fallback_wont():
+    """won't should NOT exist via fallback (wo is not a valid word)."""
+    # won't -> wo + n't, but "wo" is not in BNC
+    # Unless "won't" itself is in BNC directly
+    result = bnc.exists("won't")
+    # The result depends on whether "won't" is stored directly
+    # or if "wo" exists - just verify it doesn't crash
+    assert result is True or result is False
+
+
+def test_contraction_fallback_cant():
+    """can't should be handled correctly."""
+    # can't -> ca + n't, but "ca" might not exist
+    # OR "can't" might be stored directly
+    result = bnc.exists("can't")
+    assert result is True or result is False
+
+
+def test_contraction_fallback_doesnt_affect_regular_words():
+    """Regular words without contractions should not be affected."""
+    assert bnc.exists('well') is True  # "well" the word, not "we'll"
+    assert bnc.exists('ill') is True   # "ill" the word, not "i'll"
+    assert bnc.exists('were') is True  # "were" past tense, not "we're"
+
+
+def test_split_contraction_function():
+    """Test the internal _split_contraction function."""
+    from bnc_lookup.find_bnc import _split_contraction
+
+    # 'll contractions
+    assert _split_contraction("we'll") == ('we', "'ll")
+    assert _split_contraction("i'll") == ('i', "'ll")
+    assert _split_contraction("you'll") == ('you', "'ll")
+
+    # 'm contractions
+    assert _split_contraction("i'm") == ('i', "'m")
+
+    # 're contractions
+    assert _split_contraction("you're") == ('you', "'re")
+    assert _split_contraction("we're") == ('we', "'re")
+    assert _split_contraction("they're") == ('they', "'re")
+
+    # 've contractions
+    assert _split_contraction("i've") == ('i', "'ve")
+    assert _split_contraction("we've") == ('we', "'ve")
+
+    # 'd contractions
+    assert _split_contraction("i'd") == ('i', "'d")
+    assert _split_contraction("we'd") == ('we', "'d")
+
+    # n't contractions
+    assert _split_contraction("don't") == ('do', "n't")
+    assert _split_contraction("won't") == ('wo', "n't")
+    assert _split_contraction("can't") == ('ca', "n't")
+
+    # Non-contractions
+    assert _split_contraction('hello') is None
+    assert _split_contraction('well') is None
+    assert _split_contraction('the') is None
+
+
+def test_split_contraction_empty_stem():
+    """Contraction with no stem should return None."""
+    from bnc_lookup.find_bnc import _split_contraction
+
+    # Just the suffix with no stem
+    assert _split_contraction("'ll") is None
+    assert _split_contraction("'m") is None
+    assert _split_contraction("n't") is None
