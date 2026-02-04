@@ -1470,3 +1470,1662 @@ def test_contraction_with_all_apostrophe_variants():
                 variant_word) == standard_bucket, f'bucket mismatch for {repr(variant_word)}'
             assert bnc.relative_frequency(
                 variant_word) == standard_rf, f'rf mismatch for {repr(variant_word)}'
+
+
+# =============================================================================
+# COMPREHENSIVE CONTRACTION TESTS - NON-PRONOUN CONTRACTIONS
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Modal verb n't contractions
+# -----------------------------------------------------------------------------
+
+def test_contraction_wouldnt_exists():
+    """wouldn't should exist via contraction fallback."""
+    assert bnc.exists("wouldn't") is True
+
+
+def test_contraction_wouldnt_bucket():
+    """wouldn't should return a bucket."""
+    b = bnc.bucket("wouldn't")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_wouldnt_rf():
+    """wouldn't should return a relative frequency."""
+    rf = bnc.relative_frequency("wouldn't")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_couldnt_exists():
+    """couldn't should exist via contraction fallback."""
+    assert bnc.exists("couldn't") is True
+
+
+def test_contraction_couldnt_bucket():
+    """couldn't should return a bucket."""
+    b = bnc.bucket("couldn't")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_couldnt_rf():
+    """couldn't should return a relative frequency."""
+    rf = bnc.relative_frequency("couldn't")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_shouldnt_exists():
+    """shouldn't should exist via contraction fallback."""
+    assert bnc.exists("shouldn't") is True
+
+
+def test_contraction_shouldnt_bucket():
+    """shouldn't should return a bucket."""
+    b = bnc.bucket("shouldn't")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_shouldnt_rf():
+    """shouldn't should return a relative frequency."""
+    rf = bnc.relative_frequency("shouldn't")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_mustnt_exists():
+    """mustn't should exist via contraction fallback."""
+    assert bnc.exists("mustn't") is True
+
+
+def test_contraction_mustnt_bucket():
+    """mustn't should return a bucket."""
+    b = bnc.bucket("mustn't")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_mustnt_rf():
+    """mustn't should return a relative frequency."""
+    rf = bnc.relative_frequency("mustn't")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_mightnt_exists():
+    """mightn't should exist via contraction fallback."""
+    assert bnc.exists("mightn't") is True
+
+
+def test_contraction_mightnt_bucket():
+    """mightn't should return a bucket."""
+    b = bnc.bucket("mightn't")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_mightnt_rf():
+    """mightn't should return a relative frequency."""
+    rf = bnc.relative_frequency("mightn't")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_neednt_exists():
+    """needn't should exist via contraction fallback."""
+    assert bnc.exists("needn't") is True
+
+
+def test_contraction_neednt_bucket():
+    """needn't should return a bucket."""
+    b = bnc.bucket("needn't")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_neednt_rf():
+    """needn't should return a relative frequency."""
+    rf = bnc.relative_frequency("needn't")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_darent_exists():
+    """daren't should exist via contraction fallback."""
+    assert bnc.exists("daren't") is True
+
+
+def test_contraction_darent_bucket():
+    """daren't should return a bucket."""
+    b = bnc.bucket("daren't")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_darent_rf():
+    """daren't should return a relative frequency."""
+    rf = bnc.relative_frequency("daren't")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+# -----------------------------------------------------------------------------
+# Auxiliary verb n't contractions
+# -----------------------------------------------------------------------------
+
+def test_contraction_isnt_exists():
+    """isn't should exist via contraction fallback."""
+    assert bnc.exists("isn't") is True
+
+
+def test_contraction_isnt_bucket():
+    """isn't should return a bucket."""
+    b = bnc.bucket("isn't")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_isnt_rf():
+    """isn't should return a relative frequency."""
+    rf = bnc.relative_frequency("isn't")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_arent_exists():
+    """aren't should exist via contraction fallback."""
+    assert bnc.exists("aren't") is True
+
+
+def test_contraction_arent_bucket():
+    """aren't should return a bucket."""
+    b = bnc.bucket("aren't")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_arent_rf():
+    """aren't should return a relative frequency."""
+    rf = bnc.relative_frequency("aren't")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_wasnt_exists():
+    """wasn't should exist via contraction fallback."""
+    assert bnc.exists("wasn't") is True
+
+
+def test_contraction_wasnt_bucket():
+    """wasn't should return a bucket."""
+    b = bnc.bucket("wasn't")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_wasnt_rf():
+    """wasn't should return a relative frequency."""
+    rf = bnc.relative_frequency("wasn't")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_werent_exists():
+    """weren't should exist via contraction fallback."""
+    assert bnc.exists("weren't") is True
+
+
+def test_contraction_werent_bucket():
+    """weren't should return a bucket."""
+    b = bnc.bucket("weren't")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_werent_rf():
+    """weren't should return a relative frequency."""
+    rf = bnc.relative_frequency("weren't")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_hasnt_exists():
+    """hasn't should exist via contraction fallback."""
+    assert bnc.exists("hasn't") is True
+
+
+def test_contraction_hasnt_bucket():
+    """hasn't should return a bucket."""
+    b = bnc.bucket("hasn't")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_hasnt_rf():
+    """hasn't should return a relative frequency."""
+    rf = bnc.relative_frequency("hasn't")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_havent_exists():
+    """haven't should exist via contraction fallback."""
+    assert bnc.exists("haven't") is True
+
+
+def test_contraction_havent_bucket():
+    """haven't should return a bucket."""
+    b = bnc.bucket("haven't")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_havent_rf():
+    """haven't should return a relative frequency."""
+    rf = bnc.relative_frequency("haven't")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_hadnt_exists():
+    """hadn't should exist via contraction fallback."""
+    assert bnc.exists("hadn't") is True
+
+
+def test_contraction_hadnt_bucket():
+    """hadn't should return a bucket."""
+    b = bnc.bucket("hadn't")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_hadnt_rf():
+    """hadn't should return a relative frequency."""
+    rf = bnc.relative_frequency("hadn't")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_doesnt_exists():
+    """doesn't should exist via contraction fallback."""
+    assert bnc.exists("doesn't") is True
+
+
+def test_contraction_doesnt_bucket():
+    """doesn't should return a bucket."""
+    b = bnc.bucket("doesn't")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_doesnt_rf():
+    """doesn't should return a relative frequency."""
+    rf = bnc.relative_frequency("doesn't")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_dont_exists():
+    """don't should exist via contraction fallback."""
+    assert bnc.exists("don't") is True
+
+
+def test_contraction_dont_bucket():
+    """don't should return a bucket."""
+    b = bnc.bucket("don't")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_dont_rf():
+    """don't should return a relative frequency."""
+    rf = bnc.relative_frequency("don't")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_didnt_exists():
+    """didn't should exist via contraction fallback."""
+    assert bnc.exists("didn't") is True
+
+
+def test_contraction_didnt_bucket():
+    """didn't should return a bucket."""
+    b = bnc.bucket("didn't")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_didnt_rf():
+    """didn't should return a relative frequency."""
+    rf = bnc.relative_frequency("didn't")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+# -----------------------------------------------------------------------------
+# Interrogative pronoun contractions ('ll, 'd, 've, 're)
+# -----------------------------------------------------------------------------
+
+def test_contraction_whod_exists():
+    """who'd should exist via contraction fallback."""
+    assert bnc.exists("who'd") is True
+
+
+def test_contraction_whod_bucket():
+    """who'd should return a bucket."""
+    b = bnc.bucket("who'd")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_whod_rf():
+    """who'd should return a relative frequency."""
+    rf = bnc.relative_frequency("who'd")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_wholl_exists():
+    """who'll should exist via contraction fallback."""
+    assert bnc.exists("who'll") is True
+
+
+def test_contraction_wholl_bucket():
+    """who'll should return a bucket."""
+    b = bnc.bucket("who'll")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_wholl_rf():
+    """who'll should return a relative frequency."""
+    rf = bnc.relative_frequency("who'll")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_whove_exists():
+    """who've should exist via contraction fallback."""
+    assert bnc.exists("who've") is True
+
+
+def test_contraction_whove_bucket():
+    """who've should return a bucket."""
+    b = bnc.bucket("who've")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_whove_rf():
+    """who've should return a relative frequency."""
+    rf = bnc.relative_frequency("who've")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_whatd_exists():
+    """what'd should exist via contraction fallback."""
+    assert bnc.exists("what'd") is True
+
+
+def test_contraction_whatd_bucket():
+    """what'd should return a bucket."""
+    b = bnc.bucket("what'd")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_whatd_rf():
+    """what'd should return a relative frequency."""
+    rf = bnc.relative_frequency("what'd")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_whatll_exists():
+    """what'll should exist via contraction fallback."""
+    assert bnc.exists("what'll") is True
+
+
+def test_contraction_whatll_bucket():
+    """what'll should return a bucket."""
+    b = bnc.bucket("what'll")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_whatll_rf():
+    """what'll should return a relative frequency."""
+    rf = bnc.relative_frequency("what'll")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_whatve_exists():
+    """what've should exist via contraction fallback."""
+    assert bnc.exists("what've") is True
+
+
+def test_contraction_whatve_bucket():
+    """what've should return a bucket."""
+    b = bnc.bucket("what've")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_whatve_rf():
+    """what've should return a relative frequency."""
+    rf = bnc.relative_frequency("what've")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_whered_exists():
+    """where'd should exist via contraction fallback."""
+    assert bnc.exists("where'd") is True
+
+
+def test_contraction_whered_bucket():
+    """where'd should return a bucket."""
+    b = bnc.bucket("where'd")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_whered_rf():
+    """where'd should return a relative frequency."""
+    rf = bnc.relative_frequency("where'd")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_wherell_exists():
+    """where'll should exist via contraction fallback."""
+    assert bnc.exists("where'll") is True
+
+
+def test_contraction_wherell_bucket():
+    """where'll should return a bucket."""
+    b = bnc.bucket("where'll")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_wherell_rf():
+    """where'll should return a relative frequency."""
+    rf = bnc.relative_frequency("where'll")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_whereve_exists():
+    """where've should exist via contraction fallback."""
+    assert bnc.exists("where've") is True
+
+
+def test_contraction_whereve_bucket():
+    """where've should return a bucket."""
+    b = bnc.bucket("where've")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_whereve_rf():
+    """where've should return a relative frequency."""
+    rf = bnc.relative_frequency("where've")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_whend_exists():
+    """when'd should exist via contraction fallback."""
+    assert bnc.exists("when'd") is True
+
+
+def test_contraction_whend_bucket():
+    """when'd should return a bucket."""
+    b = bnc.bucket("when'd")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_whend_rf():
+    """when'd should return a relative frequency."""
+    rf = bnc.relative_frequency("when'd")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_whenll_exists():
+    """when'll should exist via contraction fallback."""
+    assert bnc.exists("when'll") is True
+
+
+def test_contraction_whenll_bucket():
+    """when'll should return a bucket."""
+    b = bnc.bucket("when'll")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_whenll_rf():
+    """when'll should return a relative frequency."""
+    rf = bnc.relative_frequency("when'll")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_howd_exists():
+    """how'd should exist via contraction fallback."""
+    assert bnc.exists("how'd") is True
+
+
+def test_contraction_howd_bucket():
+    """how'd should return a bucket."""
+    b = bnc.bucket("how'd")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_howd_rf():
+    """how'd should return a relative frequency."""
+    rf = bnc.relative_frequency("how'd")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_howll_exists():
+    """how'll should exist via contraction fallback."""
+    assert bnc.exists("how'll") is True
+
+
+def test_contraction_howll_bucket():
+    """how'll should return a bucket."""
+    b = bnc.bucket("how'll")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_howll_rf():
+    """how'll should return a relative frequency."""
+    rf = bnc.relative_frequency("how'll")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_howve_exists():
+    """how've should exist via contraction fallback."""
+    assert bnc.exists("how've") is True
+
+
+def test_contraction_howve_bucket():
+    """how've should return a bucket."""
+    b = bnc.bucket("how've")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_howve_rf():
+    """how've should return a relative frequency."""
+    rf = bnc.relative_frequency("how've")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_whyd_exists():
+    """why'd should exist via contraction fallback."""
+    assert bnc.exists("why'd") is True
+
+
+def test_contraction_whyd_bucket():
+    """why'd should return a bucket."""
+    b = bnc.bucket("why'd")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_whyd_rf():
+    """why'd should return a relative frequency."""
+    rf = bnc.relative_frequency("why'd")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_whyll_exists():
+    """why'll should exist via contraction fallback."""
+    assert bnc.exists("why'll") is True
+
+
+def test_contraction_whyll_bucket():
+    """why'll should return a bucket."""
+    b = bnc.bucket("why'll")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_whyll_rf():
+    """why'll should return a relative frequency."""
+    rf = bnc.relative_frequency("why'll")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+# -----------------------------------------------------------------------------
+# Demonstrative pronoun contractions
+# -----------------------------------------------------------------------------
+
+def test_contraction_thatd_exists():
+    """that'd should exist via contraction fallback."""
+    assert bnc.exists("that'd") is True
+
+
+def test_contraction_thatd_bucket():
+    """that'd should return a bucket."""
+    b = bnc.bucket("that'd")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_thatd_rf():
+    """that'd should return a relative frequency."""
+    rf = bnc.relative_frequency("that'd")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_thatll_exists():
+    """that'll should exist via contraction fallback."""
+    assert bnc.exists("that'll") is True
+
+
+def test_contraction_thatll_bucket():
+    """that'll should return a bucket."""
+    b = bnc.bucket("that'll")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_thatll_rf():
+    """that'll should return a relative frequency."""
+    rf = bnc.relative_frequency("that'll")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_thatve_exists():
+    """that've should exist via contraction fallback."""
+    assert bnc.exists("that've") is True
+
+
+def test_contraction_thatve_bucket():
+    """that've should return a bucket."""
+    b = bnc.bucket("that've")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_thatve_rf():
+    """that've should return a relative frequency."""
+    rf = bnc.relative_frequency("that've")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_thisd_exists():
+    """this'd should exist via contraction fallback."""
+    assert bnc.exists("this'd") is True
+
+
+def test_contraction_thisd_bucket():
+    """this'd should return a bucket."""
+    b = bnc.bucket("this'd")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_thisd_rf():
+    """this'd should return a relative frequency."""
+    rf = bnc.relative_frequency("this'd")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_thisll_exists():
+    """this'll should exist via contraction fallback."""
+    assert bnc.exists("this'll") is True
+
+
+def test_contraction_thisll_bucket():
+    """this'll should return a bucket."""
+    b = bnc.bucket("this'll")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_thisll_rf():
+    """this'll should return a relative frequency."""
+    rf = bnc.relative_frequency("this'll")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+# -----------------------------------------------------------------------------
+# Existential/locative contractions (there, here)
+# -----------------------------------------------------------------------------
+
+def test_contraction_thered_exists():
+    """there'd should exist via contraction fallback."""
+    assert bnc.exists("there'd") is True
+
+
+def test_contraction_thered_bucket():
+    """there'd should return a bucket."""
+    b = bnc.bucket("there'd")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_thered_rf():
+    """there'd should return a relative frequency."""
+    rf = bnc.relative_frequency("there'd")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_therell_exists():
+    """there'll should exist via contraction fallback."""
+    assert bnc.exists("there'll") is True
+
+
+def test_contraction_therell_bucket():
+    """there'll should return a bucket."""
+    b = bnc.bucket("there'll")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_therell_rf():
+    """there'll should return a relative frequency."""
+    rf = bnc.relative_frequency("there'll")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_thereve_exists():
+    """there've should exist via contraction fallback."""
+    assert bnc.exists("there've") is True
+
+
+def test_contraction_thereve_bucket():
+    """there've should return a bucket."""
+    b = bnc.bucket("there've")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_thereve_rf():
+    """there've should return a relative frequency."""
+    rf = bnc.relative_frequency("there've")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_hered_exists():
+    """here'd should exist via contraction fallback."""
+    assert bnc.exists("here'd") is True
+
+
+def test_contraction_hered_bucket():
+    """here'd should return a bucket."""
+    b = bnc.bucket("here'd")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_hered_rf():
+    """here'd should return a relative frequency."""
+    rf = bnc.relative_frequency("here'd")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_herell_exists():
+    """here'll should exist via contraction fallback."""
+    assert bnc.exists("here'll") is True
+
+
+def test_contraction_herell_bucket():
+    """here'll should return a bucket."""
+    b = bnc.bucket("here'll")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_herell_rf():
+    """here'll should return a relative frequency."""
+    rf = bnc.relative_frequency("here'll")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+# -----------------------------------------------------------------------------
+# Other common contractions
+# -----------------------------------------------------------------------------
+
+def test_contraction_everybody_d_exists():
+    """everybody'd should exist via contraction fallback."""
+    assert bnc.exists("everybody'd") is True
+
+
+def test_contraction_everybody_d_bucket():
+    """everybody'd should return a bucket."""
+    b = bnc.bucket("everybody'd")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_everybody_ll_exists():
+    """everybody'll should exist via contraction fallback."""
+    assert bnc.exists("everybody'll") is True
+
+
+def test_contraction_everybody_ll_bucket():
+    """everybody'll should return a bucket."""
+    b = bnc.bucket("everybody'll")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_everyone_d_exists():
+    """everyone'd should exist via contraction fallback."""
+    assert bnc.exists("everyone'd") is True
+
+
+def test_contraction_everyone_d_bucket():
+    """everyone'd should return a bucket."""
+    b = bnc.bucket("everyone'd")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_everyone_ll_exists():
+    """everyone'll should exist via contraction fallback."""
+    assert bnc.exists("everyone'll") is True
+
+
+def test_contraction_everyone_ll_bucket():
+    """everyone'll should return a bucket."""
+    b = bnc.bucket("everyone'll")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_someone_d_exists():
+    """someone'd should exist via contraction fallback."""
+    assert bnc.exists("someone'd") is True
+
+
+def test_contraction_someone_d_bucket():
+    """someone'd should return a bucket."""
+    b = bnc.bucket("someone'd")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_someone_ll_exists():
+    """someone'll should exist via contraction fallback."""
+    assert bnc.exists("someone'll") is True
+
+
+def test_contraction_someone_ll_bucket():
+    """someone'll should return a bucket."""
+    b = bnc.bucket("someone'll")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_something_d_exists():
+    """something'd should exist via contraction fallback."""
+    assert bnc.exists("something'd") is True
+
+
+def test_contraction_something_d_bucket():
+    """something'd should return a bucket."""
+    b = bnc.bucket("something'd")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_something_ll_exists():
+    """something'll should exist via contraction fallback."""
+    assert bnc.exists("something'll") is True
+
+
+def test_contraction_something_ll_bucket():
+    """something'll should return a bucket."""
+    b = bnc.bucket("something'll")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_nothing_d_exists():
+    """nothing'd should exist via contraction fallback."""
+    assert bnc.exists("nothing'd") is True
+
+
+def test_contraction_nothing_d_bucket():
+    """nothing'd should return a bucket."""
+    b = bnc.bucket("nothing'd")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_nothing_ll_exists():
+    """nothing'll should exist via contraction fallback."""
+    assert bnc.exists("nothing'll") is True
+
+
+def test_contraction_nothing_ll_bucket():
+    """nothing'll should return a bucket."""
+    b = bnc.bucket("nothing'll")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_anybody_d_exists():
+    """anybody'd should exist via contraction fallback."""
+    assert bnc.exists("anybody'd") is True
+
+
+def test_contraction_anybody_d_bucket():
+    """anybody'd should return a bucket."""
+    b = bnc.bucket("anybody'd")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_anybody_ll_exists():
+    """anybody'll should exist via contraction fallback."""
+    assert bnc.exists("anybody'll") is True
+
+
+def test_contraction_anybody_ll_bucket():
+    """anybody'll should return a bucket."""
+    b = bnc.bucket("anybody'll")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_anyone_d_exists():
+    """anyone'd should exist via contraction fallback."""
+    assert bnc.exists("anyone'd") is True
+
+
+def test_contraction_anyone_d_bucket():
+    """anyone'd should return a bucket."""
+    b = bnc.bucket("anyone'd")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_anyone_ll_exists():
+    """anyone'll should exist via contraction fallback."""
+    assert bnc.exists("anyone'll") is True
+
+
+def test_contraction_anyone_ll_bucket():
+    """anyone'll should return a bucket."""
+    b = bnc.bucket("anyone'll")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_anything_d_exists():
+    """anything'd should exist via contraction fallback."""
+    assert bnc.exists("anything'd") is True
+
+
+def test_contraction_anything_d_bucket():
+    """anything'd should return a bucket."""
+    b = bnc.bucket("anything'd")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_anything_ll_exists():
+    """anything'll should exist via contraction fallback."""
+    assert bnc.exists("anything'll") is True
+
+
+def test_contraction_anything_ll_bucket():
+    """anything'll should return a bucket."""
+    b = bnc.bucket("anything'll")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_nobody_d_exists():
+    """nobody'd should exist via contraction fallback."""
+    assert bnc.exists("nobody'd") is True
+
+
+def test_contraction_nobody_d_bucket():
+    """nobody'd should return a bucket."""
+    b = bnc.bucket("nobody'd")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_nobody_ll_exists():
+    """nobody'll should exist via contraction fallback."""
+    assert bnc.exists("nobody'll") is True
+
+
+def test_contraction_nobody_ll_bucket():
+    """nobody'll should return a bucket."""
+    b = bnc.bucket("nobody'll")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+# =============================================================================
+# MASSIVE BATCH TESTS - Test all contractions in bulk
+# =============================================================================
+
+def test_batch_all_nt_contractions_exist():
+    """All common n't contractions should exist."""
+    nt_contractions = [
+        "wouldn't", "couldn't", "shouldn't", "mustn't", "mightn't",
+        "needn't", "daren't", "oughtn't",
+        "isn't", "aren't", "wasn't", "weren't",
+        "hasn't", "haven't", "hadn't",
+        "doesn't", "don't", "didn't",
+    ]
+    for word in nt_contractions:
+        assert bnc.exists(word) is True, f'{word} exists failed'
+
+
+def test_batch_all_nt_contractions_bucket():
+    """All common n't contractions should return buckets."""
+    nt_contractions = [
+        "wouldn't", "couldn't", "shouldn't", "mustn't", "mightn't",
+        "needn't", "daren't", "oughtn't",
+        "isn't", "aren't", "wasn't", "weren't",
+        "hasn't", "haven't", "hadn't",
+        "doesn't", "don't", "didn't",
+    ]
+    for word in nt_contractions:
+        b = bnc.bucket(word)
+        assert b is not None, f'{word} bucket failed'
+        assert 1 <= b <= 100, f'{word} bucket out of range'
+
+
+def test_batch_all_nt_contractions_rf():
+    """All common n't contractions should return relative frequencies."""
+    nt_contractions = [
+        "wouldn't", "couldn't", "shouldn't", "mustn't", "mightn't",
+        "needn't", "daren't", "oughtn't",
+        "isn't", "aren't", "wasn't", "weren't",
+        "hasn't", "haven't", "hadn't",
+        "doesn't", "don't", "didn't",
+    ]
+    for word in nt_contractions:
+        rf = bnc.relative_frequency(word)
+        assert rf is not None, f'{word} rf failed'
+        assert 0 < rf < 1, f'{word} rf out of range'
+
+
+def test_batch_all_ll_contractions_exist():
+    """All common 'll contractions should exist."""
+    ll_contractions = [
+        # Pronouns
+        "i'll", "you'll", "he'll", "she'll", "it'll", "we'll", "they'll",
+        # Interrogatives
+        "who'll", "what'll", "where'll", "when'll", "how'll", "why'll",
+        # Demonstratives
+        "that'll", "this'll",
+        # Existential/locative
+        "there'll", "here'll",
+        # Indefinite pronouns
+        "everybody'll", "everyone'll", "somebody'll", "someone'll",
+        "something'll", "nothing'll", "anybody'll", "anyone'll", "anything'll",
+        "nobody'll",
+    ]
+    for word in ll_contractions:
+        assert bnc.exists(word) is True, f'{word} exists failed'
+
+
+def test_batch_all_ll_contractions_bucket():
+    """All common 'll contractions should return buckets."""
+    ll_contractions = [
+        "i'll", "you'll", "he'll", "she'll", "it'll", "we'll", "they'll",
+        "who'll", "what'll", "where'll", "when'll", "how'll", "why'll",
+        "that'll", "this'll",
+        "there'll", "here'll",
+        "everybody'll", "everyone'll", "somebody'll", "someone'll",
+        "something'll", "nothing'll", "anybody'll", "anyone'll", "anything'll",
+        "nobody'll",
+    ]
+    for word in ll_contractions:
+        b = bnc.bucket(word)
+        assert b is not None, f'{word} bucket failed'
+        assert 1 <= b <= 100, f'{word} bucket out of range'
+
+
+def test_batch_all_ll_contractions_rf():
+    """All common 'll contractions should return relative frequencies."""
+    ll_contractions = [
+        "i'll", "you'll", "he'll", "she'll", "it'll", "we'll", "they'll",
+        "who'll", "what'll", "where'll", "when'll", "how'll", "why'll",
+        "that'll", "this'll",
+        "there'll", "here'll",
+        "everybody'll", "everyone'll", "somebody'll", "someone'll",
+        "something'll", "nothing'll", "anybody'll", "anyone'll", "anything'll",
+        "nobody'll",
+    ]
+    for word in ll_contractions:
+        rf = bnc.relative_frequency(word)
+        assert rf is not None, f'{word} rf failed'
+        assert 0 < rf < 1, f'{word} rf out of range'
+
+
+def test_batch_all_d_contractions_exist():
+    """All common 'd contractions should exist."""
+    d_contractions = [
+        # Pronouns
+        "i'd", "you'd", "he'd", "she'd", "it'd", "we'd", "they'd",
+        # Interrogatives
+        "who'd", "what'd", "where'd", "when'd", "how'd", "why'd",
+        # Demonstratives
+        "that'd", "this'd",
+        # Existential/locative
+        "there'd", "here'd",
+        # Indefinite pronouns
+        "everybody'd", "everyone'd", "somebody'd", "someone'd",
+        "something'd", "nothing'd", "anybody'd", "anyone'd", "anything'd",
+        "nobody'd",
+    ]
+    for word in d_contractions:
+        assert bnc.exists(word) is True, f'{word} exists failed'
+
+
+def test_batch_all_d_contractions_bucket():
+    """All common 'd contractions should return buckets."""
+    d_contractions = [
+        "i'd", "you'd", "he'd", "she'd", "it'd", "we'd", "they'd",
+        "who'd", "what'd", "where'd", "when'd", "how'd", "why'd",
+        "that'd", "this'd",
+        "there'd", "here'd",
+        "everybody'd", "everyone'd", "somebody'd", "someone'd",
+        "something'd", "nothing'd", "anybody'd", "anyone'd", "anything'd",
+        "nobody'd",
+    ]
+    for word in d_contractions:
+        b = bnc.bucket(word)
+        assert b is not None, f'{word} bucket failed'
+        assert 1 <= b <= 100, f'{word} bucket out of range'
+
+
+def test_batch_all_d_contractions_rf():
+    """All common 'd contractions should return relative frequencies."""
+    d_contractions = [
+        "i'd", "you'd", "he'd", "she'd", "it'd", "we'd", "they'd",
+        "who'd", "what'd", "where'd", "when'd", "how'd", "why'd",
+        "that'd", "this'd",
+        "there'd", "here'd",
+        "everybody'd", "everyone'd", "somebody'd", "someone'd",
+        "something'd", "nothing'd", "anybody'd", "anyone'd", "anything'd",
+        "nobody'd",
+    ]
+    for word in d_contractions:
+        rf = bnc.relative_frequency(word)
+        assert rf is not None, f'{word} rf failed'
+        assert 0 < rf < 1, f'{word} rf out of range'
+
+
+def test_batch_all_ve_contractions_exist():
+    """All common 've contractions should exist."""
+    ve_contractions = [
+        # Pronouns
+        "i've", "you've", "we've", "they've",
+        # Interrogatives
+        "who've", "what've", "where've", "how've",
+        # Demonstratives
+        "that've",
+        # Existential
+        "there've",
+        # Indefinite pronouns
+        "could've", "would've", "should've", "might've", "must've",
+    ]
+    for word in ve_contractions:
+        assert bnc.exists(word) is True, f'{word} exists failed'
+
+
+def test_batch_all_ve_contractions_bucket():
+    """All common 've contractions should return buckets."""
+    ve_contractions = [
+        "i've", "you've", "we've", "they've",
+        "who've", "what've", "where've", "how've",
+        "that've",
+        "there've",
+        "could've", "would've", "should've", "might've", "must've",
+    ]
+    for word in ve_contractions:
+        b = bnc.bucket(word)
+        assert b is not None, f'{word} bucket failed'
+        assert 1 <= b <= 100, f'{word} bucket out of range'
+
+
+def test_batch_all_ve_contractions_rf():
+    """All common 've contractions should return relative frequencies."""
+    ve_contractions = [
+        "i've", "you've", "we've", "they've",
+        "who've", "what've", "where've", "how've",
+        "that've",
+        "there've",
+        "could've", "would've", "should've", "might've", "must've",
+    ]
+    for word in ve_contractions:
+        rf = bnc.relative_frequency(word)
+        assert rf is not None, f'{word} rf failed'
+        assert 0 < rf < 1, f'{word} rf out of range'
+
+
+def test_batch_all_re_contractions_exist():
+    """All common 're contractions should exist."""
+    re_contractions = [
+        "you're", "we're", "they're",
+    ]
+    for word in re_contractions:
+        assert bnc.exists(word) is True, f'{word} exists failed'
+
+
+def test_batch_all_re_contractions_bucket():
+    """All common 're contractions should return buckets."""
+    re_contractions = [
+        "you're", "we're", "they're",
+    ]
+    for word in re_contractions:
+        b = bnc.bucket(word)
+        assert b is not None, f'{word} bucket failed'
+        assert 1 <= b <= 100, f'{word} bucket out of range'
+
+
+def test_batch_all_re_contractions_rf():
+    """All common 're contractions should return relative frequencies."""
+    re_contractions = [
+        "you're", "we're", "they're",
+    ]
+    for word in re_contractions:
+        rf = bnc.relative_frequency(word)
+        assert rf is not None, f'{word} rf failed'
+        assert 0 < rf < 1, f'{word} rf out of range'
+
+
+def test_batch_all_m_contractions():
+    """i'm contraction should work across all functions."""
+    assert bnc.exists("i'm") is True
+    assert bnc.bucket("i'm") is not None
+    assert bnc.relative_frequency("i'm") is not None
+    assert bnc.expected_count("i'm", 50000) is not None
+
+
+# =============================================================================
+# COMPREHENSIVE CONSISTENCY TESTS
+# =============================================================================
+
+def test_consistency_all_modal_nt_contractions():
+    """All modal n't contractions should be consistent across functions."""
+    words = ["wouldn't", "couldn't", "shouldn't", "mustn't", "mightn't",
+             "needn't", "daren't", "oughtn't"]
+    for word in words:
+        assert bnc.exists(word) is True, f'{word} exists'
+        assert bnc.bucket(word) is not None, f'{word} bucket'
+        assert bnc.relative_frequency(word) is not None, f'{word} rf'
+        assert bnc.expected_count(word, 50000) is not None, f'{word} ec'
+
+
+def test_consistency_all_auxiliary_nt_contractions():
+    """All auxiliary n't contractions should be consistent across functions."""
+    words = ["isn't", "aren't", "wasn't", "weren't",
+             "hasn't", "haven't", "hadn't",
+             "doesn't", "don't", "didn't"]
+    for word in words:
+        assert bnc.exists(word) is True, f'{word} exists'
+        assert bnc.bucket(word) is not None, f'{word} bucket'
+        assert bnc.relative_frequency(word) is not None, f'{word} rf'
+        assert bnc.expected_count(word, 50000) is not None, f'{word} ec'
+
+
+def test_consistency_all_interrogative_contractions():
+    """All interrogative contractions should be consistent."""
+    words = [
+        "who'd", "who'll", "who've",
+        "what'd", "what'll", "what've",
+        "where'd", "where'll", "where've",
+        "when'd", "when'll",
+        "how'd", "how'll", "how've",
+        "why'd", "why'll",
+    ]
+    for word in words:
+        assert bnc.exists(word) is True, f'{word} exists'
+        assert bnc.bucket(word) is not None, f'{word} bucket'
+        assert bnc.relative_frequency(word) is not None, f'{word} rf'
+        assert bnc.expected_count(word, 50000) is not None, f'{word} ec'
+
+
+def test_consistency_all_demonstrative_contractions():
+    """All demonstrative contractions should be consistent."""
+    words = ["that'd", "that'll", "that've", "this'd", "this'll"]
+    for word in words:
+        assert bnc.exists(word) is True, f'{word} exists'
+        assert bnc.bucket(word) is not None, f'{word} bucket'
+        assert bnc.relative_frequency(word) is not None, f'{word} rf'
+        assert bnc.expected_count(word, 50000) is not None, f'{word} ec'
+
+
+def test_consistency_all_existential_contractions():
+    """All existential/locative contractions should be consistent."""
+    words = ["there'd", "there'll", "there've", "here'd", "here'll"]
+    for word in words:
+        assert bnc.exists(word) is True, f'{word} exists'
+        assert bnc.bucket(word) is not None, f'{word} bucket'
+        assert bnc.relative_frequency(word) is not None, f'{word} rf'
+        assert bnc.expected_count(word, 50000) is not None, f'{word} ec'
+
+
+def test_consistency_all_indefinite_pronoun_contractions():
+    """All indefinite pronoun contractions should be consistent."""
+    words = [
+        "everybody'd", "everybody'll",
+        "everyone'd", "everyone'll",
+        "somebody'd", "somebody'll",
+        "someone'd", "someone'll",
+        "something'd", "something'll",
+        "nothing'd", "nothing'll",
+        "anybody'd", "anybody'll",
+        "anyone'd", "anyone'll",
+        "anything'd", "anything'll",
+        "nobody'd", "nobody'll",
+    ]
+    for word in words:
+        assert bnc.exists(word) is True, f'{word} exists'
+        assert bnc.bucket(word) is not None, f'{word} bucket'
+        assert bnc.relative_frequency(word) is not None, f'{word} rf'
+        assert bnc.expected_count(word, 50000) is not None, f'{word} ec'
+
+
+def test_consistency_modal_ve_contractions():
+    """Modal 've contractions should be consistent."""
+    words = ["could've", "would've", "should've", "might've", "must've"]
+    for word in words:
+        assert bnc.exists(word) is True, f'{word} exists'
+        assert bnc.bucket(word) is not None, f'{word} bucket'
+        assert bnc.relative_frequency(word) is not None, f'{word} rf'
+        assert bnc.expected_count(word, 50000) is not None, f'{word} ec'
+
+
+# =============================================================================
+# COMPREHENSIVE CASE SENSITIVITY TESTS
+# =============================================================================
+
+def test_case_sensitivity_modal_nt():
+    """Modal n't contractions should be case insensitive."""
+    words = ["wouldn't", "couldn't", "shouldn't"]
+    for word in words:
+        upper = word.upper()
+        title = word.title()
+        assert bnc.bucket(word) == bnc.bucket(upper), f'{word} vs {upper}'
+        assert bnc.bucket(word) == bnc.bucket(title), f'{word} vs {title}'
+        assert bnc.relative_frequency(word) == bnc.relative_frequency(upper)
+        assert bnc.relative_frequency(word) == bnc.relative_frequency(title)
+
+
+def test_case_sensitivity_auxiliary_nt():
+    """Auxiliary n't contractions should be case insensitive."""
+    words = ["isn't", "aren't", "wasn't", "weren't", "hasn't", "haven't"]
+    for word in words:
+        upper = word.upper()
+        title = word.title()
+        assert bnc.bucket(word) == bnc.bucket(upper), f'{word} vs {upper}'
+        assert bnc.bucket(word) == bnc.bucket(title), f'{word} vs {title}'
+
+
+def test_case_sensitivity_interrogative():
+    """Interrogative contractions should be case insensitive."""
+    words = ["who'd", "what'll", "where've", "how'd"]
+    for word in words:
+        upper = word.upper()
+        title = word.title()
+        assert bnc.bucket(word) == bnc.bucket(upper), f'{word} vs {upper}'
+        assert bnc.bucket(word) == bnc.bucket(title), f'{word} vs {title}'
+
+
+def test_case_sensitivity_demonstrative():
+    """Demonstrative contractions should be case insensitive."""
+    words = ["that'd", "that'll", "this'll"]
+    for word in words:
+        upper = word.upper()
+        assert bnc.bucket(word) == bnc.bucket(upper), f'{word} vs {upper}'
+
+
+def test_case_sensitivity_existential():
+    """Existential contractions should be case insensitive."""
+    words = ["there'd", "there'll", "here'll"]
+    for word in words:
+        upper = word.upper()
+        assert bnc.bucket(word) == bnc.bucket(upper), f'{word} vs {upper}'
+
+
+# =============================================================================
+# COMPREHENSIVE APOSTROPHE VARIANT TESTS
+# =============================================================================
+
+def test_apostrophe_variants_modal_nt():
+    """Modal n't contractions should work with all apostrophe variants."""
+    from bnc_lookup.normalize import APOSTROPHE_VARIANTS
+
+    # Test wouldn't with all variants
+    standard = "wouldn't"
+    standard_bucket = bnc.bucket(standard)
+    for apos in APOSTROPHE_VARIANTS:
+        variant = 'wouldn' + apos + 't'
+        assert bnc.exists(
+            variant) is True, f'exists failed for {repr(variant)}'
+        assert bnc.bucket(
+            variant) == standard_bucket, f'bucket mismatch for {repr(variant)}'
+
+
+def test_apostrophe_variants_interrogative():
+    """Interrogative contractions should work with all apostrophe variants."""
+    from bnc_lookup.normalize import APOSTROPHE_VARIANTS
+
+    # Test who'd with all variants
+    standard = "who'd"
+    standard_bucket = bnc.bucket(standard)
+    for apos in APOSTROPHE_VARIANTS:
+        variant = 'who' + apos + 'd'
+        assert bnc.exists(
+            variant) is True, f'exists failed for {repr(variant)}'
+        assert bnc.bucket(
+            variant) == standard_bucket, f'bucket mismatch for {repr(variant)}'
+
+
+def test_apostrophe_variants_existential():
+    """Existential contractions should work with all apostrophe variants."""
+    from bnc_lookup.normalize import APOSTROPHE_VARIANTS
+
+    # Test there'll with all variants
+    standard = "there'll"
+    standard_bucket = bnc.bucket(standard)
+    for apos in APOSTROPHE_VARIANTS:
+        variant = 'there' + apos + 'll'
+        assert bnc.exists(
+            variant) is True, f'exists failed for {repr(variant)}'
+        assert bnc.bucket(
+            variant) == standard_bucket, f'bucket mismatch for {repr(variant)}'
+
+
+def test_apostrophe_variants_modal_ve():
+    """Modal 've contractions should work with all apostrophe variants."""
+    from bnc_lookup.normalize import APOSTROPHE_VARIANTS
+
+    # Test could've with all variants
+    standard = "could've"
+    standard_bucket = bnc.bucket(standard)
+    for apos in APOSTROPHE_VARIANTS:
+        variant = 'could' + apos + 've'
+        assert bnc.exists(
+            variant) is True, f'exists failed for {repr(variant)}'
+        assert bnc.bucket(
+            variant) == standard_bucket, f'bucket mismatch for {repr(variant)}'
+
+
+# =============================================================================
+# MEGA MATRIX TEST - ALL STEMS x ALL SUFFIXES
+# =============================================================================
+
+def test_mega_matrix_all_valid_contractions():
+    """Test a comprehensive matrix of stems and suffixes."""
+    # All stems that should work with contractions
+    stems_for_ll = [
+        'i', 'you', 'he', 'she', 'it', 'we', 'they',
+        'who', 'what', 'where', 'when', 'how', 'why',
+        'that', 'this', 'there', 'here',
+        'everybody', 'everyone', 'somebody', 'someone', 'something',
+        'nothing', 'anybody', 'anyone', 'anything', 'nobody',
+    ]
+
+    stems_for_d = [
+        'i', 'you', 'he', 'she', 'it', 'we', 'they',
+        'who', 'what', 'where', 'when', 'how', 'why',
+        'that', 'this', 'there', 'here',
+        'everybody', 'everyone', 'somebody', 'someone', 'something',
+        'nothing', 'anybody', 'anyone', 'anything', 'nobody',
+    ]
+
+    stems_for_ve = [
+        'i', 'you', 'we', 'they',
+        'who', 'what', 'where', 'how',
+        'that', 'there',
+        'could', 'would', 'should', 'might', 'must',
+    ]
+
+    stems_for_re = ['you', 'we', 'they']
+
+    stems_for_m = ['i']
+
+    stems_for_nt = [
+        'would', 'could', 'should', 'must', 'might', 'need', 'dare', 'ought',
+        'is', 'are', 'was', 'were', 'has', 'have', 'had', 'does', 'do', 'did',
+    ]
+
+    # Test 'll contractions
+    for stem in stems_for_ll:
+        word = stem + "'ll"
+        assert bnc.exists(word) is True, f'{word} exists failed'
+        assert bnc.bucket(word) is not None, f'{word} bucket failed'
+        assert bnc.relative_frequency(word) is not None, f'{word} rf failed'
+
+    # Test 'd contractions
+    for stem in stems_for_d:
+        word = stem + "'d"
+        assert bnc.exists(word) is True, f'{word} exists failed'
+        assert bnc.bucket(word) is not None, f'{word} bucket failed'
+        assert bnc.relative_frequency(word) is not None, f'{word} rf failed'
+
+    # Test 've contractions
+    for stem in stems_for_ve:
+        word = stem + "'ve"
+        assert bnc.exists(word) is True, f'{word} exists failed'
+        assert bnc.bucket(word) is not None, f'{word} bucket failed'
+        assert bnc.relative_frequency(word) is not None, f'{word} rf failed'
+
+    # Test 're contractions
+    for stem in stems_for_re:
+        word = stem + "'re"
+        assert bnc.exists(word) is True, f'{word} exists failed'
+        assert bnc.bucket(word) is not None, f'{word} bucket failed'
+        assert bnc.relative_frequency(word) is not None, f'{word} rf failed'
+
+    # Test 'm contractions
+    for stem in stems_for_m:
+        word = stem + "'m"
+        assert bnc.exists(word) is True, f'{word} exists failed'
+        assert bnc.bucket(word) is not None, f'{word} bucket failed'
+        assert bnc.relative_frequency(word) is not None, f'{word} rf failed'
+
+    # Test n't contractions
+    for stem in stems_for_nt:
+        word = stem + "n't"
+        assert bnc.exists(word) is True, f'{word} exists failed'
+        assert bnc.bucket(word) is not None, f'{word} bucket failed'
+        assert bnc.relative_frequency(word) is not None, f'{word} rf failed'
+
+
+def test_total_contraction_count():
+    """Verify we're testing a substantial number of contractions."""
+    # Count all unique contractions we're testing
+    all_contractions = set()
+
+    # Pronouns
+    pronouns = ['i', 'you', 'he', 'she', 'it', 'we', 'they']
+    for p in pronouns:
+        all_contractions.add(p + "'ll")
+        all_contractions.add(p + "'d")
+    for p in ['i', 'you', 'we', 'they']:
+        all_contractions.add(p + "'ve")
+    for p in ['you', 'we', 'they']:
+        all_contractions.add(p + "'re")
+    all_contractions.add("i'm")
+
+    # Interrogatives
+    interrogatives = ['who', 'what', 'where', 'when', 'how', 'why']
+    for i in interrogatives:
+        all_contractions.add(i + "'ll")
+        all_contractions.add(i + "'d")
+    for i in ['who', 'what', 'where', 'how']:
+        all_contractions.add(i + "'ve")
+
+    # Demonstratives
+    for d in ['that', 'this']:
+        all_contractions.add(d + "'ll")
+        all_contractions.add(d + "'d")
+    all_contractions.add("that've")
+
+    # Existential
+    for e in ['there', 'here']:
+        all_contractions.add(e + "'ll")
+        all_contractions.add(e + "'d")
+    all_contractions.add("there've")
+
+    # Indefinite pronouns
+    indefinites = ['everybody', 'everyone', 'somebody', 'someone', 'something',
+                   'nothing', 'anybody', 'anyone', 'anything', 'nobody']
+    for ind in indefinites:
+        all_contractions.add(ind + "'ll")
+        all_contractions.add(ind + "'d")
+
+    # n't contractions
+    nt_stems = ['would', 'could', 'should', 'must', 'might', 'need', 'dare', 'ought',
+                'is', 'are', 'was', 'were', 'has', 'have', 'had', 'does', 'do', 'did']
+    for stem in nt_stems:
+        all_contractions.add(stem + "n't")
+
+    # Modal 've
+    for modal in ['could', 'would', 'should', 'might', 'must']:
+        all_contractions.add(modal + "'ve")
+
+    # Verify we're testing at least 90 unique contractions
+    assert len(
+        all_contractions) >= 90, f'Only {len(all_contractions)} contractions'
+
+    # Verify all of them work
+    for word in all_contractions:
+        assert bnc.exists(word) is True, f'{word} exists failed'
+        assert bnc.bucket(word) is not None, f'{word} bucket failed'
