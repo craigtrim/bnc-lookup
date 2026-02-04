@@ -14,6 +14,8 @@ the singular form (with trailing 's' removed) is also checked.
 import hashlib
 import importlib
 
+from bnc_lookup.normalize import normalize
+
 _cache = {}
 
 
@@ -33,7 +35,10 @@ def _get_hash_set(prefix: str) -> frozenset:
 
 
 def _calculate_md5(input_text: str) -> str:
-    """Compute the MD5 hex digest of a normalized (lowercase, stripped) word.
+    """Compute the MD5 hex digest of a normalized word.
+
+    Normalization includes apostrophe variant conversion, lowercase,
+    and whitespace stripping.
 
     Args:
         input_text: The word to hash.
@@ -41,7 +46,7 @@ def _calculate_md5(input_text: str) -> str:
     Returns:
         32-character hexadecimal MD5 digest string.
     """
-    return hashlib.md5(input_text.lower().strip().encode()).hexdigest()
+    return hashlib.md5(normalize(input_text).encode()).hexdigest()
 
 
 def _hash_exists(input_text: str) -> bool:
@@ -90,7 +95,7 @@ class FindBnc:
         Returns:
             True if the word (or its singular form) exists in the BNC.
         """
-        input_text = input_text.lower().strip()
+        input_text = normalize(input_text)
 
         if _hash_exists(input_text):
             return True
