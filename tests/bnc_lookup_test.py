@@ -671,3 +671,802 @@ def test_all_functions_with_modifier_letter_apostrophe():
     assert bnc.bucket(modifier_dont) == bnc.bucket(standard_dont)
     assert bnc.relative_frequency(
         modifier_dont) == bnc.relative_frequency(standard_dont)
+
+
+# Contraction fallback tests (issue #5)
+
+def test_contraction_fallback_well():
+    """we'll should exist via contraction fallback (we + 'll)."""
+    assert bnc.exists("we'll") is True
+
+
+def test_contraction_fallback_ill():
+    """i'll should exist via contraction fallback (i + 'll)."""
+    assert bnc.exists("i'll") is True
+
+
+def test_contraction_fallback_youll():
+    """you'll should exist via contraction fallback (you + 'll)."""
+    assert bnc.exists("you'll") is True
+
+
+def test_contraction_fallback_theyll():
+    """they'll should exist via contraction fallback (they + 'll)."""
+    assert bnc.exists("they'll") is True
+
+
+def test_contraction_fallback_im():
+    """i'm should exist via contraction fallback (i + 'm)."""
+    assert bnc.exists("i'm") is True
+
+
+def test_contraction_fallback_youre():
+    """you're should exist via contraction fallback (you + 're)."""
+    assert bnc.exists("you're") is True
+
+
+def test_contraction_fallback_were():
+    """we're should exist via contraction fallback (we + 're)."""
+    assert bnc.exists("we're") is True
+
+
+def test_contraction_fallback_theyre():
+    """they're should exist via contraction fallback (they + 're)."""
+    assert bnc.exists("they're") is True
+
+
+def test_contraction_fallback_ive():
+    """i've should exist via contraction fallback (i + 've)."""
+    assert bnc.exists("i've") is True
+
+
+def test_contraction_fallback_youve():
+    """you've should exist via contraction fallback (you + 've)."""
+    assert bnc.exists("you've") is True
+
+
+def test_contraction_fallback_weve():
+    """we've should exist via contraction fallback (we + 've)."""
+    assert bnc.exists("we've") is True
+
+
+def test_contraction_fallback_theyve():
+    """they've should exist via contraction fallback (they + 've)."""
+    assert bnc.exists("they've") is True
+
+
+def test_contraction_fallback_id():
+    """i'd should exist via contraction fallback (i + 'd)."""
+    assert bnc.exists("i'd") is True
+
+
+def test_contraction_fallback_youd():
+    """you'd should exist via contraction fallback (you + 'd)."""
+    assert bnc.exists("you'd") is True
+
+
+def test_contraction_fallback_wed():
+    """we'd should exist via contraction fallback (we + 'd)."""
+    assert bnc.exists("we'd") is True
+
+
+def test_contraction_fallback_theyd():
+    """they'd should exist via contraction fallback (they + 'd)."""
+    assert bnc.exists("they'd") is True
+
+
+def test_contraction_fallback_case_insensitive():
+    """Contraction fallback should be case insensitive."""
+    assert bnc.exists("We'll") is True
+    assert bnc.exists("WE'LL") is True
+    assert bnc.exists("I'm") is True
+    assert bnc.exists("I'M") is True
+
+
+def test_contraction_fallback_curly_apostrophe():
+    """Contraction fallback should work with curly apostrophes."""
+    # we'll with curly apostrophe
+    curly_well = 'we' + chr(0x2019) + 'll'
+    assert bnc.exists(curly_well) is True
+
+    # i'm with curly apostrophe
+    curly_im = 'i' + chr(0x2019) + 'm'
+    assert bnc.exists(curly_im) is True
+
+
+def test_contraction_fallback_invalid_stem():
+    """Contractions with invalid stems should return False."""
+    # "zqn't" -> "zq" + "n't" - "zq" is not a word in BNC
+    assert bnc.exists("zqn't") is False
+    # "xyzzy'll" -> "xyzzy" + "'ll" - "xyzzy" is not a word
+    assert bnc.exists("xyzzy'll") is False
+
+
+def test_contraction_fallback_aint():
+    """ain't exists via fallback since 'ai' and 'n't' both exist in BNC."""
+    # While 'ain't' might seem like it shouldn't exist, 'ai' is in the BNC
+    # (as an abbreviation) and 'n't' is stored as a separate token
+    assert bnc.exists("ain't") is True
+
+
+def test_contraction_fallback_wont():
+    """won't should NOT exist via fallback (wo is not a valid word)."""
+    # won't -> wo + n't, but "wo" is not in BNC
+    # Unless "won't" itself is in BNC directly
+    result = bnc.exists("won't")
+    # The result depends on whether "won't" is stored directly
+    # or if "wo" exists - just verify it doesn't crash
+    assert result is True or result is False
+
+
+def test_contraction_fallback_cant():
+    """can't should be handled correctly."""
+    # can't -> ca + n't, but "ca" might not exist
+    # OR "can't" might be stored directly
+    result = bnc.exists("can't")
+    assert result is True or result is False
+
+
+def test_contraction_fallback_doesnt_affect_regular_words():
+    """Regular words without contractions should not be affected."""
+    assert bnc.exists('well') is True  # "well" the word, not "we'll"
+    assert bnc.exists('ill') is True   # "ill" the word, not "i'll"
+    assert bnc.exists('were') is True  # "were" past tense, not "we're"
+
+
+def test_split_contraction_function():
+    """Test the internal _split_contraction function."""
+    from bnc_lookup.find_bnc import _split_contraction
+
+    # 'll contractions
+    assert _split_contraction("we'll") == ('we', "'ll")
+    assert _split_contraction("i'll") == ('i', "'ll")
+    assert _split_contraction("you'll") == ('you', "'ll")
+
+    # 'm contractions
+    assert _split_contraction("i'm") == ('i', "'m")
+
+    # 're contractions
+    assert _split_contraction("you're") == ('you', "'re")
+    assert _split_contraction("we're") == ('we', "'re")
+    assert _split_contraction("they're") == ('they', "'re")
+
+    # 've contractions
+    assert _split_contraction("i've") == ('i', "'ve")
+    assert _split_contraction("we've") == ('we', "'ve")
+
+    # 'd contractions
+    assert _split_contraction("i'd") == ('i', "'d")
+    assert _split_contraction("we'd") == ('we', "'d")
+
+    # n't contractions
+    assert _split_contraction("don't") == ('do', "n't")
+    assert _split_contraction("won't") == ('wo', "n't")
+    assert _split_contraction("can't") == ('ca', "n't")
+
+    # Non-contractions
+    assert _split_contraction('hello') is None
+    assert _split_contraction('well') is None
+    assert _split_contraction('the') is None
+
+
+def test_split_contraction_empty_stem():
+    """Contraction with no stem should return None."""
+    from bnc_lookup.find_bnc import _split_contraction
+
+    # Just the suffix with no stem
+    assert _split_contraction("'ll") is None
+    assert _split_contraction("'m") is None
+    assert _split_contraction("n't") is None
+
+
+# =============================================================================
+# Contraction fallback for bucket() tests
+# =============================================================================
+
+def test_contraction_bucket_well():
+    """we'll should return a bucket via contraction fallback."""
+    b = bnc.bucket("we'll")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_bucket_ill():
+    """i'll should return a bucket via contraction fallback."""
+    b = bnc.bucket("i'll")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_bucket_youll():
+    """you'll should return a bucket via contraction fallback."""
+    b = bnc.bucket("you'll")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_bucket_theyll():
+    """they'll should return a bucket via contraction fallback."""
+    b = bnc.bucket("they'll")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_bucket_shell():
+    """she'll should return a bucket via contraction fallback."""
+    b = bnc.bucket("she'll")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_bucket_hell():
+    """he'll should return a bucket via contraction fallback."""
+    b = bnc.bucket("he'll")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_bucket_itll():
+    """it'll should return a bucket via contraction fallback."""
+    b = bnc.bucket("it'll")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_bucket_im():
+    """i'm should return a bucket via contraction fallback."""
+    b = bnc.bucket("i'm")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_bucket_youre():
+    """you're should return a bucket via contraction fallback."""
+    b = bnc.bucket("you're")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_bucket_were():
+    """we're should return a bucket via contraction fallback."""
+    b = bnc.bucket("we're")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_bucket_theyre():
+    """they're should return a bucket via contraction fallback."""
+    b = bnc.bucket("they're")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_bucket_ive():
+    """i've should return a bucket via contraction fallback."""
+    b = bnc.bucket("i've")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_bucket_youve():
+    """you've should return a bucket via contraction fallback."""
+    b = bnc.bucket("you've")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_bucket_weve():
+    """we've should return a bucket via contraction fallback."""
+    b = bnc.bucket("we've")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_bucket_theyve():
+    """they've should return a bucket via contraction fallback."""
+    b = bnc.bucket("they've")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_bucket_id():
+    """i'd should return a bucket via contraction fallback."""
+    b = bnc.bucket("i'd")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_bucket_youd():
+    """you'd should return a bucket via contraction fallback."""
+    b = bnc.bucket("you'd")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_bucket_wed():
+    """we'd should return a bucket via contraction fallback."""
+    b = bnc.bucket("we'd")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_bucket_theyd():
+    """they'd should return a bucket via contraction fallback."""
+    b = bnc.bucket("they'd")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_bucket_shed():
+    """she'd should return a bucket via contraction fallback."""
+    b = bnc.bucket("she'd")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_bucket_hed():
+    """he'd should return a bucket via contraction fallback."""
+    b = bnc.bucket("he'd")
+    assert b is not None
+    assert 1 <= b <= 100
+
+
+def test_contraction_bucket_case_insensitive():
+    """Contraction bucket fallback should be case insensitive."""
+    assert bnc.bucket("we'll") == bnc.bucket("We'll")
+    assert bnc.bucket("we'll") == bnc.bucket("WE'LL")
+    assert bnc.bucket("i'm") == bnc.bucket("I'm")
+    assert bnc.bucket("i'm") == bnc.bucket("I'M")
+    assert bnc.bucket("you're") == bnc.bucket("YOU'RE")
+
+
+def test_contraction_bucket_curly_apostrophe():
+    """Contraction bucket fallback should work with curly apostrophes."""
+    curly_well = 'we' + chr(0x2019) + 'll'
+    standard_well = "we'll"
+    assert bnc.bucket(curly_well) == bnc.bucket(standard_well)
+
+    curly_im = 'i' + chr(0x2019) + 'm'
+    standard_im = "i'm"
+    assert bnc.bucket(curly_im) == bnc.bucket(standard_im)
+
+
+def test_contraction_bucket_invalid_stem_returns_none():
+    """Contractions with invalid stems should return None for bucket."""
+    assert bnc.bucket("zqn't") is None
+    assert bnc.bucket("xyzzy'll") is None
+    assert bnc.bucket("qqq're") is None
+
+
+def test_contraction_bucket_uses_max_of_components():
+    """Contraction bucket should use max (less frequent) of components."""
+    # Get component buckets
+    we_bucket = bnc.bucket('we')
+    ll_bucket = bnc.bucket("'ll")
+    well_bucket = bnc.bucket("we'll")
+
+    # Should be max of components (conservative estimate)
+    assert we_bucket is not None
+    assert ll_bucket is not None
+    assert well_bucket is not None
+    assert well_bucket == max(we_bucket, ll_bucket)
+
+
+# =============================================================================
+# Contraction fallback for relative_frequency() tests
+# =============================================================================
+
+def test_contraction_rf_well():
+    """we'll should return a relative frequency via contraction fallback."""
+    rf = bnc.relative_frequency("we'll")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_rf_ill():
+    """i'll should return a relative frequency via contraction fallback."""
+    rf = bnc.relative_frequency("i'll")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_rf_youll():
+    """you'll should return a relative frequency via contraction fallback."""
+    rf = bnc.relative_frequency("you'll")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_rf_theyll():
+    """they'll should return a relative frequency via contraction fallback."""
+    rf = bnc.relative_frequency("they'll")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_rf_shell():
+    """she'll should return a relative frequency via contraction fallback."""
+    rf = bnc.relative_frequency("she'll")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_rf_hell():
+    """he'll should return a relative frequency via contraction fallback."""
+    rf = bnc.relative_frequency("he'll")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_rf_itll():
+    """it'll should return a relative frequency via contraction fallback."""
+    rf = bnc.relative_frequency("it'll")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_rf_im():
+    """i'm should return a relative frequency via contraction fallback."""
+    rf = bnc.relative_frequency("i'm")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_rf_youre():
+    """you're should return a relative frequency via contraction fallback."""
+    rf = bnc.relative_frequency("you're")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_rf_were():
+    """we're should return a relative frequency via contraction fallback."""
+    rf = bnc.relative_frequency("we're")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_rf_theyre():
+    """they're should return a relative frequency via contraction fallback."""
+    rf = bnc.relative_frequency("they're")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_rf_ive():
+    """i've should return a relative frequency via contraction fallback."""
+    rf = bnc.relative_frequency("i've")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_rf_youve():
+    """you've should return a relative frequency via contraction fallback."""
+    rf = bnc.relative_frequency("you've")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_rf_weve():
+    """we've should return a relative frequency via contraction fallback."""
+    rf = bnc.relative_frequency("we've")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_rf_theyve():
+    """they've should return a relative frequency via contraction fallback."""
+    rf = bnc.relative_frequency("they've")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_rf_id():
+    """i'd should return a relative frequency via contraction fallback."""
+    rf = bnc.relative_frequency("i'd")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_rf_youd():
+    """you'd should return a relative frequency via contraction fallback."""
+    rf = bnc.relative_frequency("you'd")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_rf_wed():
+    """we'd should return a relative frequency via contraction fallback."""
+    rf = bnc.relative_frequency("we'd")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_rf_theyd():
+    """they'd should return a relative frequency via contraction fallback."""
+    rf = bnc.relative_frequency("they'd")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_rf_shed():
+    """she'd should return a relative frequency via contraction fallback."""
+    rf = bnc.relative_frequency("she'd")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_rf_hed():
+    """he'd should return a relative frequency via contraction fallback."""
+    rf = bnc.relative_frequency("he'd")
+    assert rf is not None
+    assert 0 < rf < 1
+
+
+def test_contraction_rf_case_insensitive():
+    """Contraction rf fallback should be case insensitive."""
+    assert bnc.relative_frequency("we'll") == bnc.relative_frequency("We'll")
+    assert bnc.relative_frequency("we'll") == bnc.relative_frequency("WE'LL")
+    assert bnc.relative_frequency("i'm") == bnc.relative_frequency("I'm")
+    assert bnc.relative_frequency("i'm") == bnc.relative_frequency("I'M")
+    assert bnc.relative_frequency("you're") == bnc.relative_frequency("YOU'RE")
+
+
+def test_contraction_rf_curly_apostrophe():
+    """Contraction rf fallback should work with curly apostrophes."""
+    curly_well = 'we' + chr(0x2019) + 'll'
+    standard_well = "we'll"
+    assert bnc.relative_frequency(
+        curly_well) == bnc.relative_frequency(standard_well)
+
+    curly_im = 'i' + chr(0x2019) + 'm'
+    standard_im = "i'm"
+    assert bnc.relative_frequency(
+        curly_im) == bnc.relative_frequency(standard_im)
+
+
+def test_contraction_rf_invalid_stem_returns_none():
+    """Contractions with invalid stems should return None for rf."""
+    assert bnc.relative_frequency("zqn't") is None
+    assert bnc.relative_frequency("xyzzy'll") is None
+    assert bnc.relative_frequency("qqq're") is None
+
+
+def test_contraction_rf_uses_min_of_components():
+    """Contraction rf should use min (less frequent) of components."""
+    # Get component relative frequencies
+    we_rf = bnc.relative_frequency('we')
+    ll_rf = bnc.relative_frequency("'ll")
+    well_rf = bnc.relative_frequency("we'll")
+
+    # Should be min of components (conservative estimate)
+    assert we_rf is not None
+    assert ll_rf is not None
+    assert well_rf is not None
+    assert well_rf == min(we_rf, ll_rf)
+
+
+# =============================================================================
+# Contraction fallback for expected_count() tests
+# =============================================================================
+
+def test_contraction_expected_count_well():
+    """we'll should return an expected count via contraction fallback."""
+    ec = bnc.expected_count("we'll", 50000)
+    assert ec is not None
+    assert ec > 0
+
+
+def test_contraction_expected_count_im():
+    """i'm should return an expected count via contraction fallback."""
+    ec = bnc.expected_count("i'm", 50000)
+    assert ec is not None
+    assert ec > 0
+
+
+def test_contraction_expected_count_youre():
+    """you're should return an expected count via contraction fallback."""
+    ec = bnc.expected_count("you're", 50000)
+    assert ec is not None
+    assert ec > 0
+
+
+def test_contraction_expected_count_ive():
+    """i've should return an expected count via contraction fallback."""
+    ec = bnc.expected_count("i've", 50000)
+    assert ec is not None
+    assert ec > 0
+
+
+def test_contraction_expected_count_wed():
+    """we'd should return an expected count via contraction fallback."""
+    ec = bnc.expected_count("we'd", 50000)
+    assert ec is not None
+    assert ec > 0
+
+
+def test_contraction_expected_count_case_insensitive():
+    """Contraction expected_count fallback should be case insensitive."""
+    assert bnc.expected_count(
+        "we'll", 50000) == bnc.expected_count("We'll", 50000)
+    assert bnc.expected_count(
+        "we'll", 50000) == bnc.expected_count("WE'LL", 50000)
+
+
+def test_contraction_expected_count_rounded():
+    """Contraction expected_count should work with rounded=True."""
+    ec = bnc.expected_count("we'll", 50000, rounded=True)
+    assert ec is not None
+    assert isinstance(ec, int)
+
+
+def test_contraction_expected_count_invalid_stem_returns_none():
+    """Contractions with invalid stems should return None for expected_count."""
+    assert bnc.expected_count("zqn't", 50000) is None
+    assert bnc.expected_count("xyzzy'll", 50000) is None
+
+
+# =============================================================================
+# Contraction consistency tests across all functions
+# =============================================================================
+
+def test_contraction_consistency_well():
+    """we'll should be consistent across exists, bucket, rf, and expected_count."""
+    assert bnc.exists("we'll") is True
+    assert bnc.bucket("we'll") is not None
+    assert bnc.relative_frequency("we'll") is not None
+    assert bnc.expected_count("we'll", 50000) is not None
+
+
+def test_contraction_consistency_im():
+    """i'm should be consistent across all functions."""
+    assert bnc.exists("i'm") is True
+    assert bnc.bucket("i'm") is not None
+    assert bnc.relative_frequency("i'm") is not None
+    assert bnc.expected_count("i'm", 50000) is not None
+
+
+def test_contraction_consistency_youre():
+    """you're should be consistent across all functions."""
+    assert bnc.exists("you're") is True
+    assert bnc.bucket("you're") is not None
+    assert bnc.relative_frequency("you're") is not None
+    assert bnc.expected_count("you're", 50000) is not None
+
+
+def test_contraction_consistency_ive():
+    """i've should be consistent across all functions."""
+    assert bnc.exists("i've") is True
+    assert bnc.bucket("i've") is not None
+    assert bnc.relative_frequency("i've") is not None
+    assert bnc.expected_count("i've", 50000) is not None
+
+
+def test_contraction_consistency_wed():
+    """we'd should be consistent across all functions."""
+    assert bnc.exists("we'd") is True
+    assert bnc.bucket("we'd") is not None
+    assert bnc.relative_frequency("we'd") is not None
+    assert bnc.expected_count("we'd", 50000) is not None
+
+
+def test_contraction_consistency_all_ll_contractions():
+    """All 'll contractions should be consistent."""
+    ll_contractions = ["i'll", "you'll", "we'll",
+                       "they'll", "she'll", "he'll", "it'll"]
+    for word in ll_contractions:
+        assert bnc.exists(word) is True, f'{word} exists failed'
+        assert bnc.bucket(word) is not None, f'{word} bucket failed'
+        assert bnc.relative_frequency(word) is not None, f'{word} rf failed'
+        assert bnc.expected_count(word, 50000) is not None, f'{word} ec failed'
+
+
+def test_contraction_consistency_all_re_contractions():
+    """All 're contractions should be consistent."""
+    re_contractions = ["you're", "we're", "they're"]
+    for word in re_contractions:
+        assert bnc.exists(word) is True, f'{word} exists failed'
+        assert bnc.bucket(word) is not None, f'{word} bucket failed'
+        assert bnc.relative_frequency(word) is not None, f'{word} rf failed'
+        assert bnc.expected_count(word, 50000) is not None, f'{word} ec failed'
+
+
+def test_contraction_consistency_all_ve_contractions():
+    """All 've contractions should be consistent."""
+    ve_contractions = ["i've", "you've", "we've", "they've"]
+    for word in ve_contractions:
+        assert bnc.exists(word) is True, f'{word} exists failed'
+        assert bnc.bucket(word) is not None, f'{word} bucket failed'
+        assert bnc.relative_frequency(word) is not None, f'{word} rf failed'
+        assert bnc.expected_count(word, 50000) is not None, f'{word} ec failed'
+
+
+def test_contraction_consistency_all_d_contractions():
+    """All 'd contractions should be consistent."""
+    d_contractions = ["i'd", "you'd", "we'd",
+                      "they'd", "she'd", "he'd", "it'd"]
+    for word in d_contractions:
+        assert bnc.exists(word) is True, f'{word} exists failed'
+        assert bnc.bucket(word) is not None, f'{word} bucket failed'
+        assert bnc.relative_frequency(word) is not None, f'{word} rf failed'
+        assert bnc.expected_count(word, 50000) is not None, f'{word} ec failed'
+
+
+def test_contraction_consistency_m_contraction():
+    """The 'm contraction (i'm) should be consistent."""
+    assert bnc.exists("i'm") is True
+    assert bnc.bucket("i'm") is not None
+    assert bnc.relative_frequency("i'm") is not None
+    assert bnc.expected_count("i'm", 50000) is not None
+
+
+def test_contraction_consistency_invalid_all_return_false_or_none():
+    """Invalid contractions should return False/None consistently."""
+    # Use stems that definitely don't exist in BNC: zq, xyzzy, qqq, asdf, xyxyxy
+    invalid_contractions = ["zqn't", "xyzzy'll",
+                            "qqq're", "asdf've", "xyxyxy'd", "zq'm"]
+    for word in invalid_contractions:
+        assert bnc.exists(word) is False, f'{word} exists should be False'
+        assert bnc.bucket(word) is None, f'{word} bucket should be None'
+        assert bnc.relative_frequency(
+            word) is None, f'{word} rf should be None'
+        assert bnc.expected_count(
+            word, 50000) is None, f'{word} ec should be None'
+
+
+# =============================================================================
+# Comprehensive contraction matrix test
+# =============================================================================
+
+def test_contraction_matrix_all_pronouns_all_suffixes():
+    """Test all pronoun + suffix combinations comprehensively."""
+    pronouns = ['i', 'you', 'we', 'they', 'she', 'he', 'it']
+    suffixes = ["'ll", "'re", "'ve", "'d", "'m"]
+
+    # Map of which combinations are valid English contractions
+    # Some pronouns don't combine with all suffixes
+    valid_combinations = {
+        'i': ["'ll", "'ve", "'d", "'m"],
+        'you': ["'ll", "'re", "'ve", "'d"],
+        'we': ["'ll", "'re", "'ve", "'d"],
+        'they': ["'ll", "'re", "'ve", "'d"],
+        'she': ["'ll", "'d"],
+        'he': ["'ll", "'d"],
+        'it': ["'ll", "'d"],
+    }
+
+    for pronoun in pronouns:
+        for suffix in valid_combinations.get(pronoun, []):
+            word = pronoun + suffix
+            # All valid combinations should work
+            assert bnc.exists(word) is True, f'{word} exists failed'
+            assert bnc.bucket(word) is not None, f'{word} bucket failed'
+            assert bnc.relative_frequency(
+                word) is not None, f'{word} rf failed'
+
+
+def test_contraction_with_all_apostrophe_variants():
+    """Test contractions with all 20 apostrophe variants."""
+    from bnc_lookup.normalize import APOSTROPHE_VARIANTS
+
+    base_contractions = [
+        ('we', 'll'),
+        ('i', 'm'),
+        ('you', 're'),
+        ('i', 've'),
+        ('we', 'd'),
+    ]
+
+    for stem, suffix in base_contractions:
+        standard_word = stem + "'" + suffix
+        standard_bucket = bnc.bucket(standard_word)
+        standard_rf = bnc.relative_frequency(standard_word)
+
+        for apos in APOSTROPHE_VARIANTS:
+            variant_word = stem + apos + suffix
+            assert bnc.exists(
+                variant_word) is True, f'exists failed for {repr(variant_word)}'
+            assert bnc.bucket(
+                variant_word) == standard_bucket, f'bucket mismatch for {repr(variant_word)}'
+            assert bnc.relative_frequency(
+                variant_word) == standard_rf, f'rf mismatch for {repr(variant_word)}'

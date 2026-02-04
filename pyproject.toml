@@ -11,7 +11,7 @@ maintainers = [
 description = "Static Hash-Based Lookup for BNC Terms"
 name = "bnc-lookup"
 readme = "README.md"
-version = "1.3.2"
+version = "1.3.7"
 license = "MIT"
 
 keywords = [

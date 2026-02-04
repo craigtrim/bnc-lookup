@@ -15,6 +15,7 @@ import hashlib
 import importlib
 
 from bnc_lookup.normalize import normalize
+from bnc_lookup.find_bnc import _split_contraction
 
 _cache = {}
 
@@ -105,5 +106,14 @@ class FindFreq:
             result = _lookup_bucket(input_text[:-1])
             if result is not None:
                 return result
+
+        # Contraction fallback: return max bucket of components (conservative)
+        parts = _split_contraction(input_text)
+        if parts:
+            stem, suffix = parts
+            stem_bucket = _lookup_bucket(stem)
+            suffix_bucket = _lookup_bucket(suffix)
+            if stem_bucket is not None and suffix_bucket is not None:
+                return max(stem_bucket, suffix_bucket)
 
         return None

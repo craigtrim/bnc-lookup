@@ -18,6 +18,7 @@ import hashlib
 import importlib
 
 from bnc_lookup.normalize import normalize
+from bnc_lookup.find_bnc import _split_contraction
 
 _cache = {}
 
@@ -107,6 +108,15 @@ class FindRF:
             result = _lookup_rf(input_text[:-1])
             if result is not None:
                 return result
+
+        # Contraction fallback: return min frequency of components (conservative)
+        parts = _split_contraction(input_text)
+        if parts:
+            stem, suffix = parts
+            stem_rf = _lookup_rf(stem)
+            suffix_rf = _lookup_rf(suffix)
+            if stem_rf is not None and suffix_rf is not None:
+                return min(stem_rf, suffix_rf)
 
         return None
 
