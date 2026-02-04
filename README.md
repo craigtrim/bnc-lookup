@@ -5,7 +5,9 @@
 [![Downloads/Month](https://pepy.tech/badge/bnc-lookup/month)](https://pepy.tech/project/bnc-lookup)
 [![Python 3.7+](https://img.shields.io/badge/python-3.7%2B-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-[![Tests](https://img.shields.io/badge/tests-32%20passed-brightgreen)]()
+[![Tests](https://img.shields.io/badge/tests-109%20passed-brightgreen)]()
+
+> **Featured Article:** [Every Word Has a Price Tag](https://medium.com/@craigtrim/every-word-has-a-price-tag-dc04165bef5f) — How word frequency data from the British National Corpus can transform your NLP pipelines.
 
 **Is this token a word? O(1) answer. No setup. No dependencies.**
 
@@ -185,6 +187,7 @@ This package contains data derived from the British National Corpus frequency li
 
 ## Links
 
+- **Article**: [Every Word Has a Price Tag](https://medium.com/@craigtrim/every-word-has-a-price-tag-dc04165bef5f)
 - **Repository**: [github.com/craigtrim/bnc-lookup](https://github.com/craigtrim/bnc-lookup)
 - **PyPI**: [pypi.org/project/bnc-lookup](https://pypi.org/project/bnc-lookup)
 - **BNC**: [natcorp.ox.ac.uk](http://www.natcorp.ox.ac.uk)
