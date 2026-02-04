@@ -414,7 +414,6 @@ def test_words_invalid_bucket_negative():
 
 def test_words_invalid_bucket_float():
     """words() with float should raise TypeError or work if int-like."""
-    import pytest
     # This depends on implementation - may raise TypeError
     try:
         result = bnc.words(1.0)
