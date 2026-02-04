@@ -2,6 +2,7 @@
 
 [![PyPI version](https://badge.fury.io/py/bnc-lookup.svg)](https://badge.fury.io/py/bnc-lookup)
 [![Downloads](https://pepy.tech/badge/bnc-lookup)](https://pepy.tech/project/bnc-lookup)
+[![Downloads/Month](https://pepy.tech/badge/bnc-lookup/month)](https://pepy.tech/project/bnc-lookup)
 [![Python 3.7+](https://img.shields.io/badge/python-3.7%2B-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![Tests](https://img.shields.io/badge/tests-32%20passed-brightgreen)]()
