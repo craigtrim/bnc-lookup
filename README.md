@@ -5,7 +5,7 @@
 [![Downloads/Month](https://pepy.tech/badge/bnc-lookup/month)](https://pepy.tech/project/bnc-lookup)
 [![Python 3.7+](https://img.shields.io/badge/python-3.7%2B-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-[![Tests](https://img.shields.io/badge/tests-109%20passed-brightgreen)]()
+[![Tests](https://img.shields.io/badge/tests-454%20passed-brightgreen)]()
 
 > **Featured Article:** [Every Word Has a Price Tag](https://medium.com/@craigtrim/every-word-has-a-price-tag-dc04165bef5f) — How word frequency data from the British National Corpus can transform your NLP pipelines.
 
@@ -182,6 +182,7 @@ This package contains data derived from the British National Corpus frequency li
 
 ## See Also
 
+- **[gngram-lookup](https://github.com/craigtrim/gngram-lookup)** - O(1) lookup for Google Ngram frequencies across 5M words from 500 years of published books
 - **[wordnet-lookup](https://github.com/craigtrim/wordnet-lookup)** - Similar O(1) lookup using the WordNet lexicon
 - **[BNC vs WordNet Analysis](https://github.com/craigtrim/bnc-lookup/issues/1)** - Deep dive on what each captures
 
