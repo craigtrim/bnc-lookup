@@ -1421,7 +1421,6 @@ def test_contraction_consistency_invalid_all_return_false_or_none():
 def test_contraction_matrix_all_pronouns_all_suffixes():
     """Test all pronoun + suffix combinations comprehensively."""
     pronouns = ['i', 'you', 'we', 'they', 'she', 'he', 'it']
-    suffixes = ["'ll", "'re", "'ve", "'d", "'m"]
 
     # Map of which combinations are valid English contractions
     # Some pronouns don't combine with all suffixes
