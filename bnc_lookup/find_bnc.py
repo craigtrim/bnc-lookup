@@ -26,6 +26,15 @@ _cache = {}
 # Order matters: longer suffixes must be checked before shorter ones
 CONTRACTION_SUFFIXES = ("n't", "'ll", "'re", "'ve", "'m", "'d")
 
+# Specific stems that form 's contractions (where 's = "is" or "has").
+# NOT generalized — 's is ambiguous with possessive, so only known
+# contraction stems are listed here. See issue #5 and #7.
+S_CONTRACTION_STEMS = frozenset({
+    'where', 'how',
+    'somebody', 'everybody', 'everyone', 'nobody',
+    'anywhere', 'nowhere',
+})
+
 
 def _get_hash_set(prefix: str) -> frozenset:
     """Load and cache the hash suffix frozenset for a given 2-char hex prefix.
@@ -102,6 +111,13 @@ def _split_contraction(word: str) -> tuple[str, str] | None:
             stem = word[:-len(suffix)]
             if stem:  # Ensure we have a non-empty stem
                 return (stem, suffix)
+
+    # Specific 's contractions from curated allowlist (not possessives)
+    if word.endswith("'s"):
+        stem = word[:-2]
+        if stem in S_CONTRACTION_STEMS:
+            return (stem, "'s")
+
     return None
 
 
