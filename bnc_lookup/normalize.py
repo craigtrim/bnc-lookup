@@ -2,9 +2,16 @@
 # -*- coding: UTF-8 -*-
 """Text normalization utilities for BNC lookup.
 
-Handles normalization of Unicode apostrophe variants and other text
-transformations to ensure consistent matching against the BNC corpus.
+Handles normalization of Unicode apostrophe variants, accented characters,
+and other text transformations to ensure consistent matching against the
+BNC corpus (which uses ASCII-only word forms).
+
+Related GitHub Issue:
+    #8 - Normalize unicode accents before lookup
+    https://github.com/craigtrim/bnc-lookup/issues/8
 """
+
+import unicodedata
 
 # Unicode characters that should normalize to ASCII apostrophe (U+0027)
 # Ordered by likelihood of occurrence in English text
@@ -51,13 +58,43 @@ def normalize_apostrophes(text: str) -> str:
     return text.translate(_APOSTROPHE_TABLE)
 
 
+def normalize_unicode_accents(text: str) -> str:
+    """Strip Unicode accents and diacritics, keeping ASCII base characters.
+
+    Applies NFKD normalization to decompose characters into base + combining
+    marks, then encodes to ASCII (dropping combining marks). This ensures
+    that accented variants like "protégé" match their ASCII form "protege"
+    in the BNC corpus.
+
+    Args:
+        text: Input text potentially containing accented characters.
+
+    Returns:
+        Text with accents stripped (non-Latin characters are dropped).
+
+    Examples:
+        >>> normalize_unicode_accents('café')
+        'cafe'
+        >>> normalize_unicode_accents('protégé')
+        'protege'
+        >>> normalize_unicode_accents('naïve')
+        'naive'
+    """
+    return unicodedata.normalize('NFKD', text).encode('ascii', 'ignore').decode('ascii')
+
+
 def normalize(text: str) -> str:
     """Normalize text for BNC lookup.
 
-    Applies all normalization steps:
-    - Convert apostrophe variants to ASCII
-    - Convert to lowercase
-    - Strip leading/trailing whitespace
+    Applies all normalization steps in order:
+    1. Convert apostrophe variants to ASCII
+    2. Strip Unicode accents/diacritics to ASCII
+    3. Convert to lowercase
+    4. Strip leading/trailing whitespace
+
+    Apostrophe normalization runs first so that apostrophe-like characters
+    (e.g., U+2019 RIGHT SINGLE QUOTATION MARK) are preserved as ASCII
+    apostrophes before the accent-stripping step encodes to ASCII.
 
     Args:
         text: Input text to normalize.
@@ -65,4 +102,6 @@ def normalize(text: str) -> str:
     Returns:
         Normalized text ready for BNC lookup.
     """
-    return normalize_apostrophes(text).lower().strip()
+    text = normalize_apostrophes(text)
+    text = normalize_unicode_accents(text)
+    return text.lower().strip()
