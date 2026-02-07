@@ -182,6 +182,52 @@ This catches regular plurals like "computers" → "computer".
 
 Limitation: Doesn't handle irregular plurals ("mice" → "mouse").
 
+## Contraction Handling
+
+The BNC corpus tokenizes contractions into separate parts. For example, "don't" is stored as two tokens: "do" + "n't". The joined form "don't" also exists in the corpus as a ghost entry with near-zero frequency.
+
+### The Ghost Entry Problem
+
+When looking up "don't", the direct hash match finds the ghost entry (bucket 88, RF ~1e-08). This is technically correct for existence checking, but the frequency data is wrong. The word "don't" is extremely common in English, yet the ghost entry makes it appear rarer than "zydeco".
+
+### Solution: Prefer Contraction Split
+
+For `bucket()` and `relative_frequency()`, the library always tries the contraction split, even when a direct match exists. If the split result indicates higher frequency, it wins:
+
+```python
+# bucket(): lower number = more frequent
+direct_bucket = 88          # ghost entry for "don't"
+split_bucket = max(1, 1)    # max(do, n't) = 1
+# Returns 1 because 1 < 88
+
+# relative_frequency(): higher value = more frequent
+direct_rf = 1e-08           # ghost entry
+split_rf = min(0.003, 0.003)  # min(do, n't)
+# Returns 0.003 because 0.003 > 1e-08
+```
+
+For `exists()`, the direct match still short-circuits (correct behavior, since the word does exist).
+
+### Supported Contractions
+
+The following suffixes are recognized: `n't`, `'ll`, `'re`, `'ve`, `'m`, `'d`, `'s`.
+
+### The 's Ambiguity
+
+The suffix `'s` is ambiguous: "it's" is a contraction ("it is"), but "dog's" is a possessive. To avoid treating possessives as contractions, `'s` splitting is restricted to an allowlist of known stems:
+
+```
+it, he, she, that, what, there, here, where, who, how,
+everybody, everyone, everything, nobody, nothing,
+someone, something, let, one
+```
+
+Words not in this list (e.g., "dog's", "cat's", "john's") are not split.
+
+### Limitation
+
+The contraction split returns frequency data for the stem alone. For example, "it's" returns the frequency of "it", which is an overcount since "it's" is less common than all uses of "it". This is a known tradeoff: stem frequency is imprecise but far more useful than the near-zero ghost entry.
+
 ## Build Process
 
 ### Existence Hash Files

@@ -68,6 +68,25 @@ bnc.bucket('computers')    # 1
 bnc.exists('databases')    # True
 ```
 
+### Contraction Handling
+
+The BNC corpus splits contractions into separate tokens ("don't" becomes "do" + "n't"). The joined forms exist as ghost entries with near-zero frequency. The library detects contractions and returns frequency data based on the stem components instead:
+
+```python
+# Without contraction fix, "don't" would return bucket 88 (ghost entry)
+bnc.bucket("don't")     # 1 (based on "do" + "n't")
+bnc.bucket("can't")     # 1
+bnc.bucket("won't")     # 1
+bnc.bucket("it's")      # 1 (based on "it" + "'s")
+
+# Relative frequency reflects the stem, not the ghost entry
+bnc.relative_frequency("don't")   # ~0.003 (not 1e-08)
+```
+
+Supported suffixes: `n't`, `'ll`, `'re`, `'ve`, `'m`, `'d`, `'s`.
+
+The `'s` suffix is only split for known contractions (it's, he's, she's, that's, what's, etc.), not possessives (dog's, cat's). See [IMPLEMENTATION.md](IMPLEMENTATION.md) for the full allowlist and technical details.
+
 ## Relative Frequency
 
 Get the precise relative frequency of a word in the BNC corpus (raw count / 100,106,029 total tokens):
@@ -274,8 +293,9 @@ print(f"Batch lookup time: {elapsed*1000:.6f}ms for {len(words)} words")
 1. **Hash-Based Storage**: BNC terms are stored as MD5 hash suffixes in 256 buckets
 2. **Bucket Routing**: The first 2 hex characters of the hash determine the bucket (00-ff)
 3. **Lazy Loading**: Hash modules are imported on-demand and cached
-4. **Plural Handling**: If a word isn't found and ends with 's', the singular form is checked
-5. **Case Insensitive**: All inputs are normalized to lowercase
+4. **Contraction Handling**: Contractions are split into components for accurate frequency data
+5. **Plural Handling**: If a word isn't found and ends with 's', the singular form is checked
+6. **Case Insensitive**: All inputs are normalized to lowercase
 
 ### Storage Structure
 
