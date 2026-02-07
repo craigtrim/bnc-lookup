@@ -99,24 +99,27 @@ class FindRF:
         """
         input_text = normalize(input_text)
 
-        result = _lookup_rf(input_text)
-        if result is not None:
-            return result
+        direct = _lookup_rf(input_text)
 
-        # Try singular form if plural
-        if input_text.endswith('s') and len(input_text) > 3:
-            result = _lookup_rf(input_text[:-1])
-            if result is not None:
-                return result
-
-        # Contraction fallback: return min frequency of components (conservative)
+        # Contraction split: prefer higher frequency
         parts = _split_contraction(input_text)
         if parts:
             stem, suffix = parts
             stem_rf = _lookup_rf(stem)
             suffix_rf = _lookup_rf(suffix)
             if stem_rf is not None and suffix_rf is not None:
-                return min(stem_rf, suffix_rf)
+                split_rf = min(stem_rf, suffix_rf)
+                if direct is None or split_rf > direct:
+                    return split_rf
+
+        if direct is not None:
+            return direct
+
+        # Try singular form if plural
+        if input_text.endswith('s') and len(input_text) > 3:
+            result = _lookup_rf(input_text[:-1])
+            if result is not None:
+                return result
 
         return None
 

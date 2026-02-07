@@ -97,23 +97,26 @@ class FindFreq:
         """
         input_text = normalize(input_text)
 
-        result = _lookup_bucket(input_text)
-        if result is not None:
-            return result
+        direct = _lookup_bucket(input_text)
 
-        # Try singular form if plural
-        if input_text.endswith('s') and len(input_text) > 3:
-            result = _lookup_bucket(input_text[:-1])
-            if result is not None:
-                return result
-
-        # Contraction fallback: return max bucket of components (conservative)
+        # Contraction split: prefer higher frequency (lower bucket number)
         parts = _split_contraction(input_text)
         if parts:
             stem, suffix = parts
             stem_bucket = _lookup_bucket(stem)
             suffix_bucket = _lookup_bucket(suffix)
             if stem_bucket is not None and suffix_bucket is not None:
-                return max(stem_bucket, suffix_bucket)
+                split_bucket = max(stem_bucket, suffix_bucket)
+                if direct is None or split_bucket < direct:
+                    return split_bucket
+
+        if direct is not None:
+            return direct
+
+        # Try singular form if plural
+        if input_text.endswith('s') and len(input_text) > 3:
+            result = _lookup_bucket(input_text[:-1])
+            if result is not None:
+                return result
 
         return None

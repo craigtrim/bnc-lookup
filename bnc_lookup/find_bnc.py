@@ -24,7 +24,15 @@ _cache = {}
 
 # Contraction suffixes stored as separate tokens in the BNC corpus
 # Order matters: longer suffixes must be checked before shorter ones
-CONTRACTION_SUFFIXES = ("n't", "'ll", "'re", "'ve", "'m", "'d")
+CONTRACTION_SUFFIXES = ("n't", "'ll", "'re", "'ve", "'m", "'d", "'s")
+
+# Stems where 's is a contraction (is/has), not a possessive.
+# "dog's" = possessive (no split), "it's" = "it is" (split).
+S_CONTRACTION_STEMS = frozenset({
+    'it', 'he', 'she', 'that', 'what', 'there', 'here', 'where',
+    'who', 'how', 'everybody', 'everyone', 'everything', 'nobody',
+    'nothing', 'someone', 'something', 'let', 'one',
+})
 
 
 def _get_hash_set(prefix: str) -> frozenset:
@@ -100,8 +108,12 @@ def _split_contraction(word: str) -> tuple[str, str] | None:
     for suffix in CONTRACTION_SUFFIXES:
         if word.endswith(suffix):
             stem = word[:-len(suffix)]
-            if stem:  # Ensure we have a non-empty stem
-                return (stem, suffix)
+            if not stem:
+                continue
+            # For 's, only split if stem is a known contraction (not possessive)
+            if suffix == "'s" and stem not in S_CONTRACTION_STEMS:
+                continue
+            return (stem, suffix)
     return None
 
 
