@@ -8,6 +8,7 @@
 - [Expected Count](#expected-count)
 - [Frequency Buckets](#frequency-buckets)
 - [Command-Line Interface](#command-line-interface)
+- [Morphological Analysis](#morphological-analysis)
 - [Advanced Usage](#advanced-usage)
 - [Performance](#performance)
 - [How It Works](#how-it-works)
@@ -220,6 +221,48 @@ bnc-expected the 50000 --rounded
 # 3091
 ```
 
+## Morphological Analysis
+
+The library provides morphological suffix analysis alongside existence and frequency data.
+
+### Derivational Suffixes
+
+```python
+import bnc_lookup as bnc
+
+# Pre-computed O(1) lookup
+bnc.get_suffixes('happiness')       # ['ness']
+bnc.get_suffixes('beautifully')     # ['ful', 'ly']
+bnc.get_suffixes('cat')             # []  (monomorphemic)
+bnc.get_suffixes('xyz123')          # None (not in BNC)
+```
+
+### Inflectional Suffixes
+
+```python
+# Runtime detection against closed set of English endings
+bnc.get_inflections('cats')         # ['s']
+bnc.get_inflections('running')      # ['ing']
+bnc.get_inflections('walked')       # ['ed']
+bnc.get_inflections('fastest')      # ['est']
+bnc.get_inflections('cat')          # []  (base form)
+bnc.get_inflections('xyz123')       # None
+```
+
+### Combined Analysis
+
+```python
+from bnc_lookup import Morphology, get_morphology
+
+m = get_morphology('happiness')
+# Morphology(derivational=['ness'], inflectional=[])
+
+m = get_morphology('cats')
+# Morphology(derivational=[], inflectional=['s'])
+```
+
+For full API reference including allomorphic restoration logic, return value semantics, and design decisions, see [MORPHOLOGY.md](MORPHOLOGY.md).
+
 ## Advanced Usage
 
 For more control, you can use the classes directly:
@@ -344,16 +387,20 @@ For detailed implementation notes, see [IMPLEMENTATION.md](IMPLEMENTATION.md).
 ```
 bnc-lookup/
 ├── bnc_lookup/
-│   ├── __init__.py           # Public API
+│   ├── __init__.py           # Public API (exists, bucket, get_suffixes, get_inflections, get_morphology, ...)
 │   ├── cli.py                # Command-line interface
 │   ├── find_bnc.py           # Word existence lookup
 │   ├── find_freq.py          # Frequency bucket lookup
 │   ├── find_rf.py            # Relative frequency lookup
 │   ├── find_words.py         # Bucket-to-words reverse lookup
+│   ├── find_suffixes.py      # O(1) derivational suffix lookup
+│   ├── find_inflections.py   # Runtime inflectional suffix detection
+│   ├── morphology.py         # Combined Morphology dataclass and get_morphology()
 │   ├── hs/                   # Hash storage (256 files)
 │   ├── freq/                 # Frequency buckets (256 files)
 │   ├── rf/                   # Relative frequencies (256 files)
-│   └── bw/                   # Bucket word lists (100 files)
+│   ├── bw/                   # Bucket word lists (100 files)
+│   └── sx/                   # Suffix data (256 files)
 ├── builder/
 │   ├── build_hash_files.py           # Generates hs/ files
 │   ├── build_frequency_buckets.py    # Generates freq/ files

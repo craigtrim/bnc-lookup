@@ -11,6 +11,9 @@ Public API:
     sample(bucket, n)                     -> list
     relative_frequency(word)              -> float | None
     expected_count(word, length, rounded) -> float | int | None
+    get_suffixes(word)                    -> list[str] | None
+    get_inflections(word)                 -> list[str] | None
+    get_morphology(word)                  -> Morphology | None
 
 All lookups are case-insensitive with automatic plural fallback.
 """
@@ -18,6 +21,9 @@ All lookups are case-insensitive with automatic plural fallback.
 from bnc_lookup.find_bnc import FindBnc
 from bnc_lookup.find_freq import FindFreq
 from bnc_lookup.find_rf import FindRF
+from bnc_lookup.find_suffixes import get_suffixes
+from bnc_lookup.find_inflections import get_inflections
+from bnc_lookup.morphology import Morphology, get_morphology
 from bnc_lookup.find_words import FindWords
 
 

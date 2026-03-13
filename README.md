@@ -5,7 +5,7 @@
 [![Downloads/Month](https://pepy.tech/badge/bnc-lookup/month)](https://pepy.tech/project/bnc-lookup)
 [![Python 3.7+](https://img.shields.io/badge/python-3.7%2B-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-[![Tests](https://img.shields.io/badge/tests-109%20passed-brightgreen)]()
+[![Tests](https://img.shields.io/badge/tests-1083%20passed-brightgreen)]()
 
 > **Featured Article:** [Every Word Has a Price Tag](https://medium.com/@craigtrim/every-word-has-a-price-tag-dc04165bef5f) — How word frequency data from the British National Corpus can transform your NLP pipelines.
 
@@ -46,6 +46,43 @@ bnc.exists('computers')    # True
 bnc.exists('THE')          # True
 ```
 
+## Morphological Analysis
+
+Beyond existence and frequency, the library provides morphological suffix analysis: derivational suffixes (pre-computed, O(1)) and inflectional suffixes (runtime detection).
+
+```python
+import bnc_lookup as bnc
+
+# Derivational suffixes (pre-computed from morphroot)
+bnc.get_suffixes('happiness')      # ['ness']
+bnc.get_suffixes('beautifully')    # ['ful', 'ly']
+bnc.get_suffixes('cat')            # []  (monomorphemic)
+bnc.get_suffixes('xyz123')         # None (not in BNC)
+
+# Inflectional suffixes (runtime detection)
+bnc.get_inflections('cats')        # ['s']
+bnc.get_inflections('running')     # ['ing']
+bnc.get_inflections('walked')      # ['ed']
+bnc.get_inflections('fastest')     # ['est']
+bnc.get_inflections('cat')         # []  (base form)
+bnc.get_inflections('xyz123')      # None
+
+# Combined morphological analysis
+bnc.get_morphology('happiness')
+# Morphology(derivational=['ness'], inflectional=[])
+
+bnc.get_morphology('cats')
+# Morphology(derivational=[], inflectional=['s'])
+
+bnc.get_morphology('cat')
+# Morphology(derivational=[], inflectional=[])
+
+bnc.get_morphology('xyz123')
+# None
+```
+
+See [Morphological Analysis Documentation](https://github.com/craigtrim/bnc-lookup/blob/master/docs/MORPHOLOGY.md) for the full API reference.
+
 ## Features
 
 - **Zero Dependencies** - Pure Python, no external packages
@@ -56,6 +93,9 @@ bnc.exists('THE')          # True
 - **Frequency Ranking** - 100 buckets from most to least common
 - **Relative Frequency** - Per-word precision for quantitative analysis
 - **Expected Counts** - Predict word occurrences in any text length
+- **Derivational Suffixes** - Pre-computed O(1) morphological suffix lookup
+- **Inflectional Suffixes** - Runtime detection of -s, -es, -ing, -ed, -est
+- **Combined Morphology** - Unified derivational + inflectional analysis via `Morphology` dataclass
 - **CLI Tools** - `bnc-exists`, `bnc-bucket`, `bnc-freq`, `bnc-expected`
 
 ## The Problem This Solves
@@ -183,6 +223,7 @@ This package contains data derived from the British National Corpus frequency li
 ## See Also
 
 - **[wordnet-lookup](https://github.com/craigtrim/wordnet-lookup)** - Similar O(1) lookup using the WordNet lexicon
+- **[morphroot](https://github.com/craigtrim/morphroot)** - Morpheme segmentation engine (source of derivational suffix data)
 - **[BNC vs WordNet Analysis](https://github.com/craigtrim/bnc-lookup/issues/1)** - Deep dive on what each captures
 
 ## Links
