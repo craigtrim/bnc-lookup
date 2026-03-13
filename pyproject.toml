@@ -1,18 +1,18 @@
-[tool.poetry]
+[project]
+name = "bnc-lookup"
+version = "1.5.0"
+description = "Static Hash-Based Lookup for BNC Terms"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.7"
 
 authors = [
-  "Craig Trim <craigtrim@gmail.com>",
+  { name = "Craig Trim", email = "craigtrim@gmail.com" },
 ]
 
 maintainers = [
-  "Craig Trim <craigtrim@gmail.com>",
+  { name = "Craig Trim", email = "craigtrim@gmail.com" },
 ]
-
-description = "Static Hash-Based Lookup for BNC Terms"
-name = "bnc-lookup"
-readme = "README.md"
-version = "1.5.0"
-license = "MIT"
 
 keywords = [
   "bnc",
@@ -25,8 +25,6 @@ keywords = [
   "linguistics",
 ]
 
-repository = "https://github.com/craigtrim/bnc-lookup"
-
 classifiers = [
   "Development Status :: 4 - Beta",
   "Intended Audience :: Developers",
@@ -38,19 +36,21 @@ classifiers = [
   "Operating System :: OS Independent",
 ]
 
-[tool.poetry.scripts]
+[project.urls]
+Repository = "https://github.com/craigtrim/bnc-lookup"
+
+[project.scripts]
 bnc-exists = "bnc_lookup.cli:exists"
 bnc-bucket = "bnc_lookup.cli:bucket"
 bnc-freq = "bnc_lookup.cli:freq"
 bnc-expected = "bnc_lookup.cli:expected"
 
+[tool.poetry]
+
 [tool.poetry.build]
 generate-setup-file = true
 
-[tool.poetry.dependencies]
-python = "^3.7"
-
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 autopep8 = "*"
 ruff = "*"
 plac = "*"
@@ -66,6 +66,10 @@ line-length = 120
 
 [tool.ruff.lint]
 ignore = ["F403", "F405"]
+
+[tool.ruff.lint.per-file-ignores]
+"bnc_lookup/__init__.py" = ["F401"]
+"bnc_lookup/sx/__init__.py" = ["F401"]
 
 [tool.mypy]
 enable_error_code = [
